@@ -1,0 +1,71 @@
+\documentclass[a4paper,10pt]{article}
+
+\usepackage[a4paper, total={7in, 10in}]{geometry}
+\usepackage{titlesec}
+\usepackage{fancyhdr}
+\usepackage[sfdefault]{atkinson} %% Option 'sfdefault' if the base
+%% font of the document is to be sans serif.
+\usepackage[T1]{fontenc}
+\usepackage{hyperref}
+\usepackage{enumitem}
+
+\urlstyle{same}
+\hypersetup{
+  colorlinks=true,
+  linkcolor=blue,
+  filecolor=magenta,
+  urlcolor=cyan,
+  pdftitle={Data Management Project},
+}
+
+\pagestyle{fancy}
+\fancyhf{}
+% \cfoot{\footnotesize Autorizzo il trattamento dei miei dati personali ai sensi del Dlgs 196 del 30 giugno 2003 e dell’art. 13 GDPR (Regolamento UE 2016/679) ai fini della ricerca e selezione del personale.}
+\renewcommand{\headrulewidth}{0pt}
+
+\title{Data Management Project \\
+  \large DBMS Comparison}
+
+\author{Leonardo Idone, 2088501}
+
+\begin{document}
+
+\maketitle
+
+In this project, I will attempt to qualitatively compare two different
+data models and their associated technologies. Specifically, the
+comparison will include the Resource Description Framework and the
+Relational Model. It will be conducted in the following manner:
+
+\begin{enumerate}
+  \item Choosing a dataset and an associated real-world scenario
+  related to its use.
+  \item Creating two implementations of the dataset, based on the
+  requirements outlined in the previous steps.
+  \item Importing the respective implementations and the dataset into
+  a relational database and a triplestore.
+  \item Comparing various aspects of the two solutions, both practical
+  and conceptual (e.g. query language, memory usage, query execution
+  speed, model flexibility in representing the dataset.).
+\end{enumerate}
+For this purpose, the chosen dataset, RDBMS and triplestore are:
+
+\begin{itemize}
+  \item Dataset(s): \href{https://datasets.imdbws.com/}{The IMDb
+    Non-Commercial Datasets}, for their size, ease of access and
+  simple approachability, which contains the full IMDb website with
+  all its information regarding movies, actors, and their relations.
+  \item RDBMS: \href{https://www.postgresql.org/}{PostgreSQL}, being
+  open-source, mature and on-par with current industry standards.
+  \item RDF Store (triplestore):
+  \href{https://jena.apache.org/documentation/fuseki2/}{Apache Jena
+    Fuseki}, for the same reasons as Postgres.
+\end{itemize}
+
+\end{document}
+
+
+%%% Local Variables:
+%%% mode: LaTeX
+%%% TeX-master: t
+%%% End:
