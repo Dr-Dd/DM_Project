@@ -4,18 +4,25 @@ services:
     image: postgres:latest
     container_name: postgres
     environment:
-      POSTGRES_PASSWORD: example 
+      POSTGRES_PASSWORD: "postgres"
+      POSTGRES_USER: "postgres"
+      POSTGRES_DB: "imdb"
+      PGUSER: "postgres"
     volumes:
       - ./postgres/docker-entrypoint-initdb.d:/docker-entrypoint-initdb.d
     healthcheck:
-      test: ["CMD-SHELL", "sh -c 'pg_isready -U ${POSTGRES_USER} -d ${POSTGRES_DB}'"]
+      test: ["CMD-SHELL", "sh -c 'pg_isready'"]
       interval: 10s
       timeout: 3s
       retries: 3
 
+
   adminer:
     image: adminer:latest
     container_name: adminer
+    depends_on:
+      postgres:
+        condition: service_healthy
     environment:
       ADMINER_DEFAULT_SERVER: postgres
     ports:
@@ -25,13 +32,17 @@ services:
   fuseki:
     #command: [ "--tdb2", "--update", "--loc", "databases/DB2", "/ds" ]
     image: fuseki
-    build: fuseki
+    build: 
+      context: ./fuseki
+      dockerfile: Dockerfile
+      args:
+        JENA_VERSION: 6.0.0
     container_name: fuseki
     ports:
       - 3030:3030
     volumes:
-      - ./jena-fuseki/logs:/fuseki/logs
-      - ./jena-fuseki/databases:/fuseki/databases
+      - ./fuseki/logs:/fuseki/logs
+      - ./fuseki/databases:/fuseki/databases
     healthcheck:
       test: ["CMD", "wget", "--spider", "-S", "http://localhost:3030/$/ping"]
       interval: 1m
