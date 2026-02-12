@@ -3,6 +3,10 @@ CREATE TABLE titleType (
   titleTypeId serial PRIMARY KEY,
   titleTypeName text UNIQUE NOT NULL
 );
+CREATE TABLE genre (
+  genreId serial PRIMARY KEY,
+  genreName text UNIQUE NOT NULL
+);
 CREATE TABLE titleBasics (
   tconst text PRIMARY KEY,
   primaryTitle text NOT NULL,
@@ -12,10 +16,6 @@ CREATE TABLE titleBasics (
   endYear date,
   runtimeMinutes int,
   titleTypeId serial REFERENCES titleType(titleTypeId)
-);
-CREATE TABLE genre (
-  genreId serial PRIMARY KEY,
-  genreName text UNIQUE NOT NULL
 );
 CREATE TABLE titleBasics_genre (
   tconst text REFERENCES titleBasics(tconst),
