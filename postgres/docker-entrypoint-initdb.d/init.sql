@@ -59,7 +59,7 @@ CREATE TABLE region (
 );
 CREATE TABLE titleAkas (
   akasId serial PRIMARY KEY,
-  titleId text REFERENCES titleBasics(tconst),
+  titleId text REFERENCES titleBasics(tconst) NOT NULL,
   ordering smallint NOT NULL,
   title text NOT NULL,
   regionId serial REFERENCES region(regionId),
@@ -119,7 +119,7 @@ CREATE TABLE job (
 );
 CREATE TABLE character (
   characterId serial PRIMARY KEY,
-  characterName text UNIQUE 
+  characterName text UNIQUE
 );
 CREATE TABLE titlePrincipals (
   tconst text REFERENCES titleBasics(tconst),
@@ -138,4 +138,3 @@ CREATE TABLE ratings (
   check (averageRating >= 0 AND averageRating <= 10),
   numVotes int
 );
-
