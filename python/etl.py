@@ -1,11 +1,11 @@
 #!/usr/bin/env python3
 # Data configuration file
+import io
 import os
 import gzip
 import psycopg
 import csv
 import re
-import threading
 
 BLOCK_SIZE = 4 * 1024 * 1024 * 1024
 
@@ -204,15 +204,22 @@ attribute_pattern = re.compile("|".join(sorted(known_attributes, key=len, revers
 # Usage
 conn_string = "postgresql://postgres:postgres@postgres:5432/imdb"
 
+def write_buffer_row(buf, *args):
+    size = 0
+    for a in args:
+        size += len(a)
+    buf.write("\t".join(map(str, args)) + "\n")
+    return size
+
 def pg_null(v):
-    if v is None or v == r"\N":
+    if v is None or v == "\\N":
         return None
     return v
 
 def dateify(y):
-    if y == "\\N":
-        return None
-    return f"{int(y):04d}-01-01"
+    if y != "\\N":
+        return f"{int(y):04d}-01-01"
+    return y
 
 def type_split(word):
     return type_pattern.findall(word)
@@ -227,18 +234,15 @@ def handle_files():
             match f:
                 case "title.basics.tsv.gz":
                     r = csv.DictReader(d, delimiter="\t", quoting=csv.QUOTE_NONE)
-                    conn_1 = psycopg.connect(conn_string)
-                    conn_2 = psycopg.connect(conn_string)
-                    conn_3 = psycopg.connect(conn_string)
-                    conn_4 = psycopg.connect(conn_string)
-                    cur_1 = conn_1.cursor()
-                    cur_2 = conn_2.cursor()
-                    cur_3 = conn_3.cursor()
-                    cur_4 = conn_4.cursor()
-                    cur_2.execute("ALTER TABLE titleBasics DISABLE TRIGGER ALL;")
-                    cur_4.execute("ALTER TABLE titleBasics_genre DISABLE TRIGGER ALL;")
-                    with (cur_1.copy("COPY titleType (titleTypeId, titleTypeName) FROM STDIN") as cp_titleType,
-                          cur_2.copy("""COPY titleBasics (
+                    conn = psycopg.connect(conn_string)
+                    cur_titleType = conn.cursor()
+                    cur_titleBasics = conn.cursor()
+                    cur_genre = conn.cursor()
+                    cur_titleBasics_genre = conn.cursor()
+                    cur_titleBasics.execute("ALTER TABLE titleBasics DISABLE TRIGGER ALL;")
+                    cur_titleBasics_genre.execute("ALTER TABLE titleBasics_genre DISABLE TRIGGER ALL;")
+                    with (cur_titleType.copy("COPY titleType (titleTypeId, titleTypeName) FROM STDIN") as cp_titleType,
+                          cur_titleBasics.copy("""COPY titleBasics (
                           tconst,
                           primaryTitle,
                           originalTitle,
@@ -248,71 +252,89 @@ def handle_files():
                           runtimeMinutes,
                           titleTypeId) FROM STDIN
                           """) as cp_titleBasics,
-                          cur_3.copy("COPY genre (genreId, genreName) FROM STDIN") as cp_genre,
-                          cur_4.copy("COPY titleBasics_genre (tconst, genreId) FROM STDIN") as cp_titleBasics_genre
+                          cur_genre.copy("COPY genre (genreId, genreName) FROM STDIN") as cp_genre,
+                          cur_titleBasics_genre.copy("COPY titleBasics_genre (tconst, genreId) FROM STDIN") as cp_titleBasics_genre
                           ):
                         print("Connected for titles.", flush=True)
                         titleType_rows = {}
                         titleTypeId = 1
                         genre_rows = {}
                         genreId = 1
+                        buf_titleType = io.StringIO()
+                        buf_titleBasics = io.StringIO()
+                        buf_genre = io.StringIO()
+                        buf_titleBasics_genre = io.StringIO()
+                        tot_size = 0
                         for l in r:
                             if l["titleType"] != "\\N":
                                 if l["titleType"] not in titleType_rows:
                                     titleType_rows[l["titleType"]] = titleTypeId
+                                    tot_size += write_buffer_row(
+                                        buf_titleType,
+                                        titleTypeId,
+                                        l["titleType"]
+                                    )
                                     titleTypeId += 1
-                                    cp_titleType.write_row((
-                                        titleType_rows[l["titleType"]], l["titleType"]
-                                    ))
-                            cp_titleBasics.write_row((
+                            tot_size += write_buffer_row(
+                                buf_titleBasics,
                                 l["tconst"],
                                 l["primaryTitle"],
                                 l["originalTitle"],
                                 l["isAdult"],
-                                pg_null(dateify(l["startYear"])),
-                                pg_null(dateify(l["endYear"])),
-                                pg_null(l["runtimeMinutes"]),
-                                pg_null(titleType_rows[l["titleType"]])
-                            ))
+                                dateify(l["startYear"]),
+                                dateify(l["endYear"]),
+                                l["runtimeMinutes"],
+                                titleType_rows.get(l["titleType"], "\\N")
+                            )
                             if l["genres"] != "\\N":
                                 for g in l["genres"].split(","):
                                     if g not in genre_rows:
                                         genre_rows[g] = genreId
+                                        tot_size += write_buffer_row(
+                                            buf_genre,
+                                            genreId,
+                                            g
+                                        )
                                         genreId += 1
-                                        cp_genre.write_row((
-                                            genre_rows[g], g
-                                        ))
-                                    cp_titleBasics_genre.write_row((
-                                        l["tconst"], genre_rows[g]
-                                    ))
-                    conn_1.commit()
-                    conn_2.commit()
-                    conn_3.commit()
-                    conn_4.commit()
-                    cur_2.execute("ALTER TABLE titleBasics ENABLE TRIGGER ALL;")
-                    cur_4.execute("ALTER TABLE titleBasics_genre ENABLE TRIGGER ALL;")
+                                    tot_size += write_buffer_row(
+                                        buf_titleBasics_genre,
+                                        l["tconst"],
+                                        genre_rows[g]
+                                    )
+                            if tot_size >= BLOCK_SIZE:
+                                cp_titleType.write(buf_titleType.getvalue())
+                                cp_titleBasics.write(buf_titleBasics.getvalue())
+                                cp_genre.write(buf_genre.getvalue())
+                                cp_titleBasics_genre.write(buf_titleBasics_genre.getvalue())
+                                tot_size = 0
+                                for b in (buf_titleType, buf_titleBasics, buf_genre, buf_titleBasics_genre):
+                                    b.seek(0)
+                                    b.truncate(0)
+                        cp_titleType.write(buf_titleType.getvalue())
+                        cp_titleBasics.write(buf_titleBasics.getvalue())
+                        cp_genre.write(buf_genre.getvalue())
+                        cp_titleBasics_genre.write(buf_titleBasics_genre.getvalue())
+                    conn.commit()
+                    cur_titleBasics.execute("ALTER TABLE titleBasics ENABLE TRIGGER ALL;")
+                    cur_titleBasics_genre.execute("ALTER TABLE titleBasics_genre ENABLE TRIGGER ALL;")
+                    conn.close()
+
                 case "title.akas.tsv.gz":
                     r = csv.DictReader(d, delimiter="\t", quoting=csv.QUOTE_NONE)
-                    conn_1 = psycopg.connect(conn_string)
-                    conn_2 = psycopg.connect(conn_string)
-                    conn_3 = psycopg.connect(conn_string)
-                    conn_4 = psycopg.connect(conn_string)
-                    conn_5 = psycopg.connect(conn_string)
-                    conn_6 = psycopg.connect(conn_string)
-                    conn_7 = psycopg.connect(conn_string)
-                    cur_1 = conn_1.cursor()
-                    cur_2 = conn_2.cursor()
-                    cur_3 = conn_3.cursor()
-                    cur_4 = conn_4.cursor()
-                    cur_5 = conn_5.cursor()
-                    cur_6 = conn_6.cursor()
-                    cur_7 = conn_7.cursor()
-                    cur_3.execute("ALTER TABLE titleAkas DISABLE TRIGGER ALL;")
-                    cur_5.execute("ALTER TABLE akaType_titleAkas DISABLE TRIGGER ALL;")
-                    cur_7.execute("ALTER TABLE attribute_titleAkas DISABLE TRIGGER ALL;")
-                    with(cur_1.copy("COPY language (languageId, languageName) FROM STDIN") as cp_language,
-                         cur_2.copy("COPY region (regionId, regionName) FROM STDIN") as cp_region,
-                         cur_3.copy("""
+                    conn = psycopg.connect(conn_string)
+                    cur_language = conn.cursor()
+                    cur_region = conn.cursor()
+                    cur_titleAkas = conn.cursor()
+                    cur_akaType = conn.cursor()
+                    cur_akaType_titleAkas = conn.cursor()
+                    cur_attribute = conn.cursor()
+                    cur_attribute_titleAkas = conn.cursor()
+                    cur_titleAkas.execute("ALTER TABLE titleAkas DISABLE TRIGGER ALL;")
+                    cur_akaType_titleAkas.execute("ALTER TABLE akaType_titleAkas DISABLE TRIGGER ALL;")
+                    cur_attribute_titleAkas.execute("ALTER TABLE attribute_titleAkas DISABLE TRIGGER ALL;")
+                    with(cur_language.copy("COPY language (languageId, languageName) FROM STDIN") as cp_language,
+                         cur_region.copy("COPY region (regionId, regionName) FROM STDIN") as cp_region,
+                         cur_titleAkas.copy("""
                          COPY titleAkas (
                          akasId,
                          titleId,
@@ -323,10 +345,10 @@ def handle_files():
                          isOriginalTitle
                          ) FROM STDIN
                          """) as cp_titleAkas,
-                        cur_4.copy("COPY akaType (akaTypeId, akaTypeName) FROM STDIN") as cp_akaType,
-                        cur_5.copy("COPY akaType_titleAkas (akaTypeId, titleId) FROM STDIN") as cp_akaType_titleAkas,
-                        cur_6.copy("COPY attribute (attributeId, attributeText) FROM STDIN") as cp_attribute,
-                        cur_7.copy("COPY attribute_titleAkas (attributeId, akasId) FROM STDIN") as cp_attribute_titleAkas
+                        cur_akaType.copy("COPY akaType (akaTypeId, akaTypeName) FROM STDIN") as cp_akaType,
+                        cur_akaType_titleAkas.copy("COPY akaType_titleAkas (akaTypeId, titleId) FROM STDIN") as cp_akaType_titleAkas,
+                        cur_attribute.copy("COPY attribute (attributeId, attributeText) FROM STDIN") as cp_attribute,
+                        cur_attribute_titleAkas.copy("COPY attribute_titleAkas (attributeId, akasId) FROM STDIN") as cp_attribute_titleAkas
                          ):
                         print("Connected for akas.")
                         language_id_map = {}
@@ -338,60 +360,94 @@ def handle_files():
                         attribute_id_map = {}
                         attribute_id = 1
                         titleAkas_id = 1
+                        buf_language = io.StringIO()
+                        buf_region = io.StringIO()
+                        buf_titleAkas = io.StringIO()
+                        buf_akaType = io.StringIO()
+                        buf_akaType_titleAkas = io.StringIO()
+                        buf_attribute = io.StringIO()
+                        buf_attribute_titleAkas = io.StringIO()
+                        tot_size = 0
                         for l in r:
                             if l["language"] != "\\N":
                                 if l["language"] not in language_id_map:
                                     language_id_map[l["language"]] = language_id
+                                    tot_size += write_buffer_row(
+                                        buf_language,
+                                        language_id_map[l["language"]],
+                                        l["language"]
+                                    )
                                     language_id += 1
-                                    cp_language.write_row((
-                                        language_id_map[l["language"]], l["language"]
-                                    ))
                             if l["region"] != "\\N":
                                 if l["region"] not in region_id_map:
                                     region_id_map[l["region"]] = region_id
+                                    tot_size += write_buffer_row(
+                                        buf_region,
+                                        region_id_map[l["region"]],
+                                        l["region"]
+                                    )
                                     region_id += 1
-                                    cp_region.write_row((
-                                        region_id_map[l["region"]], l["region"]
-                                    ))
                             if l["types"] != "\\N":
                                 for t in type_split(l["types"]):
                                     if t not in akaType_id_map:
                                         akaType_id_map[t] = akaType_id
+                                        tot_size += write_buffer_row(
+                                            buf_akaType,
+                                            akaType_id_map[t],
+                                            t
+                                        )
                                         akaType_id += 1
-                                        cp_akaType.write_row((akaType_id_map[t], t))
-                                    cp_akaType_titleAkas.write_row((
-                                        akaType_id_map[t], titleAkas_id
-                                    ))
-                            cp_titleAkas.write_row((
+                                    tot_size += write_buffer_row(
+                                        buf_akaType_titleAkas,
+                                        akaType_id_map[t],
+                                        titleAkas_id
+                                    )
+                            tot_size += write_buffer_row(
+                                buf_titleAkas,
                                 titleAkas_id,
                                  l["titleId"],
                                  l["ordering"],
                                  l["title"],
-                                 pg_null(region_id_map.get(l["region"])),
-                                 pg_null(language_id_map.get(l["language"])),
+                                 region_id_map.get(l["region"], "\\N"),
+                                 language_id_map.get(l["language"], "\\N"),
                                  l["isOriginalTitle"]
-                            ))
+                            )
                             if l["attributes"] != "\\N":
                                 for t in attribute_split(l["attributes"]):
                                     if t not in attribute_id_map:
                                         attribute_id_map[t] = attribute_id
+                                        tot_size += write_buffer_row(
+                                            buf_attribute,
+                                            attribute_id_map[t],
+                                            t
+                                        )
                                         attribute_id += 1
-                                        cp_attribute.write_row((attribute_id_map[t], t))
-                                    cp_attribute_titleAkas.write_row((
+                                    tot_size += write_buffer_row(
+                                        buf_attribute_titleAkas,
                                         attribute_id_map[t],
                                         titleAkas_id
-                                    ))
+                                    )
                             titleAkas_id += 1
-                    conn_1.commit()
-                    conn_2.commit()
-                    conn_3.commit()
-                    conn_4.commit()
-                    conn_5.commit()
-                    conn_6.commit()
-                    conn_7.commit()
-                    cur_3.execute("ALTER TABLE titleAkas ENABLE TRIGGER ALL;")
-                    cur_5.execute("ALTER TABLE akaType_titleAkas ENABLE TRIGGER ALL;")
-                    cur_7.execute("ALTER TABLE attribute_titleAkas ENABLE TRIGGER ALL;")
+                            if tot_size >= BLOCK_SIZE:
+                                cp_language.write(buf_language.getvalue())
+                                cp_region.write(buf_region.getvalue())
+                                cp_titleAkas.write(buf_titleAkas.getvalue())
+                                cp_akaType.write(buf_akaType.getvalue())
+                                cp_akaType_titleAkas.write(buf_akaType_titleAkas.getvalue())
+                                cp_attribute.write(buf_attribute.getvalue())
+                                cp_attribute_titleAkas.write(buf_attribute_titleAkas.getvalue())
+                                tot_size = 0
+                                for b in (buf_titleType,
+                                          buf_titleBasics,
+                                          buf_genre,
+                                          buf_titleBasics_genre):
+                                    b.seek(0)
+                                    b.truncate(0)
+                    conn.commit()
+                    cur_titleAkas.execute("ALTER TABLE titleAkas ENABLE TRIGGER ALL;")
+                    cur_akaType_titleAkas.execute("ALTER TABLE akaType_titleAkas ENABLE TRIGGER ALL;")
+                    cur_attribute_titleAkas.execute("ALTER TABLE attribute_titleAkas ENABLE TRIGGER ALL;")
+                    conn.close()
 
 
 
