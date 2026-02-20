@@ -1,5 +1,12 @@
 #!/usr/bin/env python3
 # Data configuration file
+
+################################################################
+################################################################
+########## SCRATCH ALL THIS, THE BEST PROCESS IS: ##############
+########## csv -> pg_bulkload -> temp_table -> pg processing -> destroy table ###
+########## GET USED TO IT U PU$$Y ##############################
+########## PEACE ###############################################
 import io
 import os
 import gzip
