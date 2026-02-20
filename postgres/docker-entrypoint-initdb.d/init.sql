@@ -63,7 +63,7 @@ CREATE UNLOGGED TABLE name_basics_orig (
     birthYear smallint,
     deathYear smallint,
     primaryProfession text,
-    knownForTitle text
+    knownForTitles text
 );
 
 
@@ -109,8 +109,9 @@ CREATE UNLOGGED TABLE title_akas_orig (
   title text,
   region text,
   language text,
-  primaryProfession text,
-  knownForTitles text
+  types text,
+  attributes text,
+  isOriginalTitle boolean
 );
 
 
