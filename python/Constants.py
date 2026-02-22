@@ -1,5 +1,3 @@
-from copy_template import CopyTemplate
-
 conn_string = "postgresql://postgres:postgres@postgres:5432/imdb"
 
 known_types = {
@@ -180,13 +178,3 @@ known_attributes = {
     "Yiddish dubbed",
     "YIVO translation"
 }
-
-copy_templates = [
-    TitleBasicsCopyTemplate("title.akas.tsv.gz"),
-    NameBasicsCopyTemplate("name.basics.tsv.gz"),
-    TitleAkasCopyTemplate("title.akas.tsv.gz"),
-    TitleCrewCopyTemplate("title.crew.tsv.gz"),
-    TitleEpisodeCopyTemplate("title.episode.tsv.gz"),
-    TitlePrincipalsCopyTemplate("title.principals.tsv.gz"),
-    TitleRatingsCopyTemplate("title.ratings.tsv.gz")
-]

@@ -16,6 +16,6 @@ class TitleRatingsCopyTemplate(CopyTemplate):
     def ingest_row(self, row):
         self.get_table_ctx("ratings").write_row((
             row["tconst"],
-            row["averageRating"],
-            row["numVotes"]
+            self.pg_null(row["averageRating"]),
+            self.pg_null(row["numVotes"])
         ))

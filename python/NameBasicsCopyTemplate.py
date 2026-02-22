@@ -18,7 +18,7 @@ class NameBasicsCopyTemplate(CopyTemplate):
         },
         "profession_nameBasics": {
             "professionId": None,
-            "professionName": None
+            "nconst": None
         },
         "knownForTitles": {
             "tconst": None,

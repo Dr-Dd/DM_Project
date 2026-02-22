@@ -39,7 +39,7 @@ CREATE UNLOGGED TABLE title_basics_orig (
 CREATE UNLOGGED TABLE nameBasics (
   nconst text PRIMARY KEY,
   primaryName text NOT NULL,
-  birthYear date NOT NULL,
+  birthYear date,
   deathYear date
 );
 CREATE UNLOGGED TABLE profession (
@@ -174,7 +174,7 @@ CREATE UNLOGGED TABLE title_principals_orig (
   ordering smallint,
   nconst text,
   category text,
-  job text, 
+  job text,
   characters text
 );
 

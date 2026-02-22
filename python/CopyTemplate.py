@@ -20,7 +20,13 @@ class CopyTemplate:
     def dateify(y):
         if y != "\\N":
             return f"{int(y):04d}-01-01"
-        return y
+        return None
+
+    @staticmethod
+    def pg_null(v):
+        if v == "\\N":
+            return None
+        return v
 
     @classmethod
     def get_schema(cls):
@@ -30,4 +36,4 @@ class CopyTemplate:
         raise NotImplementedError
 
     def get_table_ctx(self, t):
-        return self.conn_cur_cp_ctx_dict[t][4]
+        return self.conn_cur_cp_ctx_dict[t][3]

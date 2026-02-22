@@ -61,8 +61,8 @@ class TitleBasicsCopyTemplate(CopyTemplate):
             row["isAdult"],
             self.dateify(row["startYear"]),
             self.dateify(row["endYear"]),
-            row["runtimeMinutes"],
-            self.titleType_id_dict.get(row["titleType"], "\\N")
+            self.pg_null(row["runtimeMinutes"]),
+            TitleBasicsCopyTemplate.titleType_id_dict.get(row["titleType"], None)
         ))
         if row["genres"] != "\\N":
             for g in row["genres"].split(","):

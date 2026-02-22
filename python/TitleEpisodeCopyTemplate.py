@@ -24,6 +24,6 @@ class TitleEpisodeCopyTemplate(CopyTemplate):
             TitleEpisodeCopyTemplate.episodeIdCounter,
             row["tconst"],
             row["parentTconst"],
-            row["seasonNumber"],
-            row["episodeNumber"]
+            self.pg_null(row["seasonNumber"]),
+            self.pg_null(row["episodeNumber"])
         ))

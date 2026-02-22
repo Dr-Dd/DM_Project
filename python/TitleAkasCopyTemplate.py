@@ -1,4 +1,7 @@
 from CopyTemplate import CopyTemplate
+from Constants import known_types, known_attributes
+import re
+
 
 class TitleAkasCopyTemplate(CopyTemplate):
 
@@ -71,6 +74,16 @@ class TitleAkasCopyTemplate(CopyTemplate):
         TitleAkasCopyTemplate.attributeIdCounter += 1
         TitleAkasCopyTemplate.attribute_id_dict[a] = TitleAkasCopyTemplate.attributeIdCounter
 
+    @staticmethod
+    def type_split(word):
+        type_pattern = re.compile("|".join(sorted(known_types, key=len, reverse=True)))
+        return type_pattern.findall(word)
+
+    @staticmethod
+    def attribute_split(word):
+        attribute_pattern = re.compile("|".join(sorted(known_attributes, key=len, reverse=True)))
+        return attribute_pattern.findall(word)
+
     def ingest_row(self, row):
         TitleAkasCopyTemplate.titleAkasIdCounter += 1
         if row["language"] != "\\N":
@@ -90,7 +103,7 @@ class TitleAkasCopyTemplate(CopyTemplate):
                     reg
                 ))
         if row["types"] != "\\N":
-            for t in type_split(row["types"]):
+            for t in self.type_split(row["types"]):
                 if t not in TitleAkasCopyTemplate.akaType_id_dict:
                     self.insert_new_akaType(t)
                     self.get_table_ctx("akaType").write_row((
@@ -106,12 +119,12 @@ class TitleAkasCopyTemplate(CopyTemplate):
             row["titleId"],
             row["ordering"],
             row["title"],
-            self.region_id_dict.get(row["region"], "\\N"),
-            self.language_id_dict.get(row["language"], "\\N"),
+            TitleAkasCopyTemplate.region_id_dict.get(row["region"], None),
+            TitleAkasCopyTemplate.language_id_dict.get(row["language"], None),
             row["isOriginalTitle"]
         ))
         if row["attributes"] != "\\N":
-            for a in attribute_split(row["attributes"]):
+            for a in self.attribute_split(row["attributes"]):
                 if a not in TitleAkasCopyTemplate.attribute_id_dict:
                     self.insert_new_attribute(a)
                     self.get_table_ctx("attribute").write_row((

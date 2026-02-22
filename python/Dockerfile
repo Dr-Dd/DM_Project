@@ -1,6 +1,10 @@
 FROM python:latest
 
-COPY *.py /
-RUN pip install psycopg[binary] rapidgzip && chmod +x /*.py
+COPY requirements.txt /
 
-ENTRYPOINT ["/etl.py"]
+RUN pip install --no-cache-dir -r /requirements.txt 
+
+COPY *.py /
+RUN chmod +x /*.py
+
+ENTRYPOINT ["/main.py"]
