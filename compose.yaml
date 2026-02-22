@@ -10,6 +10,7 @@ services:
       PGUSER: "postgres"
     volumes:
       - ./postgres/docker-entrypoint-initdb.d:/docker-entrypoint-initdb.d
+      - pgdata:/var/lib/postgresql
     healthcheck:
       test: ["CMD-SHELL", "sh -c 'pg_isready'"]
       interval: 10s
@@ -63,3 +64,5 @@ services:
     volumes:
       - ./data:/data:ro
 
+volumes:
+    pgdata:

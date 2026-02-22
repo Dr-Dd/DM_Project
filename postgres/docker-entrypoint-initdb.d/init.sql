@@ -31,7 +31,7 @@ CREATE UNLOGGED TABLE title_basics_orig (
   startYear smallint,
   endYear smallint,
   runtimeMinutes int,
-  genres text
+  genres text[]
 );
 
 
@@ -62,8 +62,8 @@ CREATE UNLOGGED TABLE name_basics_orig (
     primaryName text,
     birthYear smallint,
     deathYear smallint,
-    primaryProfession text,
-    knownForTitles text
+    primaryProfession text[],
+    knownForTitles text[]
 );
 
 
@@ -109,8 +109,8 @@ CREATE UNLOGGED TABLE title_akas_orig (
   title text,
   region text,
   language text,
-  types text,
-  attributes text,
+  types text[],
+  attributes text[],
   isOriginalTitle boolean
 );
 
@@ -128,8 +128,8 @@ CREATE UNLOGGED TABLE writer (
 );
 CREATE UNLOGGED TABLE title_crew_orig (
   tconst text,
-  directors text,
-  writers text
+  directors text[],
+  writers text[]
 );
 
 -- title.episode.tsv.gz
@@ -160,6 +160,7 @@ CREATE UNLOGGED TABLE character (
   characterId serial PRIMARY KEY,
   characterName text UNIQUE
 );
+-- just a big aggregation table
 CREATE UNLOGGED TABLE titlePrincipals (
   tconst text REFERENCES titleBasics(tconst),
   ordering smallint,

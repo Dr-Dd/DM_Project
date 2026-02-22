@@ -1,0 +1,61 @@
+from CopyTemplate import CopyTemplate
+
+class TitlePrincipalsCopyTemplate(CopyTemplate):
+
+    categoryIdCounter = 0
+    categoryName_id_dict = {}
+    jobIdCounter = 0
+    jobName_id_dict = {}
+    characterIdCounter = 0
+    characterName_id_dict = {}
+
+    def __init__(self, filename, table_dict):
+        super().__init__(filename, table_dict)
+
+    @classmethod
+    def insert_new_category(cls, cat):
+        TitlePrincipalsCopyTemplate.categoryIdCounter += 1
+        TitlePrincipalsCopyTemplate.categoryName_id_dict[cat] = TitlePrincipalsCopyTemplate.categoryIdCounter
+
+    @classmethod
+    def insert_new_job(cls, j):
+        TitlePrincipalsCopyTemplate.jobIdCounter += 1
+        TitlePrincipalsCopyTemplate.jobName_id_dict[j] = TitlePrincipalsCopyTemplate.jobIdCounter
+
+    @classmethod
+    def insert_new_character(cls, c):
+        TitlePrincipalsCopyTemplate.characterIdCounter += 1
+        TitlePrincipalsCopyTemplate.characterName_id_dict[c] = TitlePrincipalsCopyTemplate.characterIdCounter
+
+    def ingest_row(self, row):
+        if row["category"] not in categoryName_id_dict:
+            row["category"] = cat
+            TitlePrincipalsCopyTemplate.insert_new_category(cat)
+            self.get_table_ctx("category").write_row((
+                TitlePrincipalsCopyTemplate.categoryIdCounter,
+                cat
+            ))
+        if row["job"] != "\\N":
+            row["job"] = j
+            if j not in jobName_id_dict:
+                TitlePrincipalsCopyTemplate.insert_new_job(j)
+                self.get_table_ctx("job").write_row((
+                    TitlePrincipalsCopyTemplate.jobIdCounter,
+                    j
+                ))
+        if row["character"] != "\\N":
+            c = row["character"].strip('[]"')
+            if c not in character_id_dict:
+                TitlePrincipalsCopyTemplate.insert_new_character(c)
+                self.get_table_ctx("character").write_row((
+                    TitlePrincipalsCopyTemplate.characterIdCounter,
+                    c
+                ))
+        self.get_table_ctx("titlePrincipals").write_row((
+            row["tconst"],
+            row["ordering"],
+            row["nconst"],
+            TitlePrincipalsCopyTemplate.category_id_dict.get(row["category"], "\\N"),
+            TitlePrincipalsCopyTemplate.job_id_dict.get(row["job"], "\\N"),
+            TitlePrincipalsCopyTemplate.character_id_dict.get(row["character"].strip('[]"'), "\\N")
+        ))
