@@ -13,7 +13,6 @@ class TitlePrincipalsCopyTemplate(CopyTemplate):
         "category": {
             "categoryId": None,
             "categoryName": None
-
         },
         "job": {
             "jobId": None,
