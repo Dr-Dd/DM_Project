@@ -1,4 +1,5 @@
 from constants import known_types, known_attributes
+import re
 
 def pg_null(v):
     if v is None or v == "\\N":

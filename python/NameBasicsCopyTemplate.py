@@ -5,8 +5,28 @@ class NameBasicsCopyTemplate(CopyTemplate):
     professionIdCounter = 0
     professionName_id_dict = {}
 
-    def __init__(self, filename, table_dict):
-        super().__init__(filename, table_dict)
+    schema = {
+        "nameBasics": {
+            "nconst": None,
+            "primaryName": None,
+            "birthYear": None,
+            "deathYear": None
+        },
+        "profession": {
+            "professionId": None,
+            "professionName": None
+        },
+        "profession_nameBasics": {
+            "professionId": None,
+            "professionName": None
+        },
+        "knownForTitles": {
+            "tconst": None,
+            "nconst": None
+        }
+    }
+    def __init__(self, filename):
+        super().__init__(filename)
 
     @classmethod
     def insert_new_profession(cls, p):

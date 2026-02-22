@@ -2,8 +2,16 @@ from CopyTemplate import CopyTemplate
 
 class TitleRatingsCopyTemplate(CopyTemplate):
 
-    def __init__(self, filename, table_dict):
-        super().__init__(filename, table_dict)
+    schema = {
+        "ratings": {
+            "tconst": None,
+            "averageRating": None,
+            "numVotes": None
+        }
+    }
+
+    def __init__(self, filename):
+        super().__init__(filename)
 
     def ingest_row(self, row):
         self.get_table_ctx("ratings").write_row((

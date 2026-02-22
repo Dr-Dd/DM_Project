@@ -5,8 +5,18 @@ class TitleEpisodeCopyTemplate(CopyTemplate):
 
     episodeIdCounter = 0
 
-    def __init__(self, filename, table_dict):
-        super().__init__(filename, table_dict)
+    schema = {
+        "titleEpisode": {
+            "episodeId": None,
+            "tconst": None,
+            "parentTconst": None,
+            "seasonNumber": None,
+            "episodeNumber": None
+        }
+    }
+
+    def __init__(self, filename):
+        super().__init__(filename)
 
     def ingest_row(self, row):
         TitleEpisodeCopyTemplate.episodeIdCounter += 1

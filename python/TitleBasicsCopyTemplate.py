@@ -7,8 +7,33 @@ class TitleBasicsCopyTemplate(CopyTemplate):
     titleType_id_dict = {}
     genre_id_dict = {}
 
-    def __init__(self, filename, table_dict):
-        super().__init__(filename, table_dict)
+    schema = {
+        "titleType": {
+            "titleTypeId": None,
+            "titleTypeName": None
+        },
+        "genre": {
+            "genreId": None,
+            "genreName": None
+        },
+        "titleBasics": {
+            "tconst": None,
+            "primaryTitle": None,
+            "originalTitle": None,
+            "isAdult": None,
+            "startYear": None,
+            "endYear": None,
+            "runtimeMinutes": None,
+            "titleTypeId": None
+        },
+        "titleBasics_genre": {
+            "tconst": None,
+            "genreId": None
+        }
+    }
+
+    def __init__(self, filename):
+        super().__init__(filename)
 
     @classmethod
     def insert_new_titleType(cls, t):

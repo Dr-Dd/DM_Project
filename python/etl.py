@@ -1,11 +1,10 @@
 #!/usr/bin/env python3
 # Data configuration file
-import io
 import os
-import gzip
 import psycopg
 import csv
-import re
+import rapidgzip
+import contextlib
 
 from constants import conn_string, copy_templates
 
@@ -16,7 +15,7 @@ def handle_files():
             r = csv.DictReader(d, delimiter="\t", quoting=csv.QUOTE_NONE)
             with contextlib.ExitStack() as stack:
             # Create connections, cursors, copy objs and contexts
-                for k, v in o.table_dict.items():
+                for k, v in o.get_schema.items():
                     cn = psycopg.connect(conn_string)
                     cur = cn.cursor()
                     cur.execute(f"ALTER TABLE {k} DISABLE TRIGGER ALL;")

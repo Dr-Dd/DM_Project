@@ -182,40 +182,11 @@ known_attributes = {
 }
 
 copy_templates = [
-    TitleBasicsTemplate(
-        "title.akas.tsv.gz", {
-            "language": [
-                "languageId",
-                "languageName"
-            ],
-            "region": [
-                "regionId",
-                "regionName"
-            ],
-            "titleAkas": [
-                "akasId",
-                "titleId",
-                "ordering",
-                "title",
-                "regionId",
-                "languageId",
-                "isOriginalTitle"
-            ],
-            "akaType": [
-                "akaTypeId",
-                "akaTypeName"
-            ],
-            "akaType_titleAkas": [
-                "akaTypeId",
-                "titleId"
-            ],
-            "attribute": [
-                "attributeId",
-                "attributeText"
-            ],
-            "attribute_titleAkas": [
-                "attributeId",
-                "akasId"
-            ]
-         }
+    TitleBasicsCopyTemplate("title.akas.tsv.gz"),
+    NameBasicsCopyTemplate("name.basics.tsv.gz"),
+    TitleAkasCopyTemplate("title.akas.tsv.gz"),
+    TitleCrewCopyTemplate("title.crew.tsv.gz"),
+    TitleEpisodeCopyTemplate("title.episode.tsv.gz"),
+    TitlePrincipalsCopyTemplate("title.principals.tsv.gz"),
+    TitleRatingsCopyTemplate("title.ratings.tsv.gz")
 ]

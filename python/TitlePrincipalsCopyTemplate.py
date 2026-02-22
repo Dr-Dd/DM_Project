@@ -9,8 +9,32 @@ class TitlePrincipalsCopyTemplate(CopyTemplate):
     characterIdCounter = 0
     characterName_id_dict = {}
 
-    def __init__(self, filename, table_dict):
-        super().__init__(filename, table_dict)
+    schema = {
+        "category": {
+            "categoryId": None,
+            "categoryName": None
+
+        },
+        "job": {
+            "jobId": None,
+            "jobName": None
+        },
+        "character": {
+            "characterId": None,
+            "characterName": None
+        },
+        "titlePrincipals": {
+            "tconst": None,
+            "ordering": None,
+            "nconst": None,
+            "categoryId": None,
+            "jobId": None,
+            "characterId": None
+        }
+    }
+
+    def __init__(self, filename):
+        super().__init__(filename)
 
     @classmethod
     def insert_new_category(cls, cat):

@@ -12,8 +12,44 @@ class TitleAkasCopyTemplate(CopyTemplate):
     attribute_id_dict = {}
     titleAkasIdCounter = 0
 
-    def __init__(self, filename, table_dict):
-        super().__init__(filename, table_dict)
+    schema = {
+        "language": {
+            "languageId": None,
+            "languageName": None
+        },
+        "region": {
+            "regionId": None,
+            "regionName": None
+        },
+        "titleAkas": {
+            "akasId": None,
+            "titleId": None,
+            "ordering": None,
+            "title": None,
+            "regionId": None,
+            "languageId": None,
+            "isOriginalTitle": None
+        },
+        "akaType": {
+            "akaTypeId": None,
+            "akaTypeName": None
+        },
+        "akaType_titleAkas": {
+            "akaTypeId": None,
+            "titleId": None
+        },
+        "attribute": {
+            "attributeId": None,
+            "attributeText": None
+        },
+        "attribute_titleAkas": {
+            "attributeId": None,
+            "akasId": None
+        }
+    }
+
+    def __init__(self, filename):
+        super().__init__(filename)
 
     @classmethod
     def insert_new_language(cls, lang):
