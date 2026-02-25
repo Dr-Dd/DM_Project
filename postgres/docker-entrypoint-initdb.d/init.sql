@@ -22,17 +22,6 @@ CREATE UNLOGGED TABLE titleBasics_genre (
   genreId integer REFERENCES genre(genreId),
   PRIMARY KEY(tconst, genreId)
 );
-CREATE UNLOGGED TABLE title_basics_orig (
-  tconst text,
-  titleType text,
-  primaryTitle text,
-  originalTitle text,
-  isAdult boolean,
-  startYear smallint,
-  endYear smallint,
-  runtimeMinutes int,
-  genres text[]
-);
 
 
 -- name.basics.tsv.gz
@@ -56,14 +45,6 @@ CREATE UNLOGGED TABLE knownForTitles (
   tconst text REFERENCES titleBasics(tconst),
   nconst text REFERENCES nameBasics(nconst),
   PRIMARY KEY (nconst, tconst)
-);
-CREATE UNLOGGED TABLE name_basics_orig (
-    nconst text,
-    primaryName text,
-    birthYear smallint,
-    deathYear smallint,
-    primaryProfession text[],
-    knownForTitles text[]
 );
 
 
@@ -103,16 +84,6 @@ CREATE UNLOGGED TABLE attribute_titleAkas (
   akasId integer REFERENCES titleAkas(akasId),
   PRIMARY KEY(attributeId, akasId)
 );
-CREATE UNLOGGED TABLE title_akas_orig (
-  titleId text,
-  ordering smallint,
-  title text,
-  region text,
-  language text,
-  types text[],
-  attributes text[],
-  isOriginalTitle boolean
-);
 
 
 -- title.crew.tsv.gz
@@ -126,23 +97,12 @@ CREATE UNLOGGED TABLE writer (
   nconst text REFERENCES nameBasics(nconst),
   PRIMARY KEY (tconst, nconst)
 );
-CREATE UNLOGGED TABLE title_crew_orig (
-  tconst text,
-  directors text[],
-  writers text[]
-);
 
 -- title.episode.tsv.gz
 CREATE UNLOGGED TABLE titleEpisode (
   episodeId serial PRIMARY KEY,
   tconst text REFERENCES titleBasics(tconst),
   parentTconst text REFERENCES titleBasics(tconst),
-  seasonNumber int,
-  episodeNumber int
-);
-CREATE UNLOGGED TABLE title_episode_orig (
-  tconst text,
-  parentTconst text,
   seasonNumber int,
   episodeNumber int
 );
@@ -169,14 +129,6 @@ CREATE UNLOGGED TABLE titlePrincipals (
   jobId integer REFERENCES job(jobId),
   characterId integer REFERENCES character(characterId)
 );
-CREATE UNLOGGED TABLE title_principals_orig (
-  tconst text,
-  ordering smallint,
-  nconst text,
-  category text,
-  job text,
-  characters text
-);
 
 
 -- title.ratings.tsv.gz
@@ -184,10 +136,5 @@ CREATE UNLOGGED TABLE ratings (
   tconst text REFERENCES titleBasics(tconst),
   averageRating decimal(3,1),
   check (averageRating >= 0 AND averageRating <= 10),
-  numVotes int
-);
-CREATE UNLOGGED TABLE title_ratings_orig (
-  tconst text,
-  averageRating decimal(3,1),
   numVotes int
 );
