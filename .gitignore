@@ -1,21 +1,6 @@
 # Created by https://www.toptal.com/developers/gitignore/api/linux,archlinuxpackages,python,git,emacs,vim,zsh
 # Edit at https://www.toptal.com/developers/gitignore?templates=linux,archlinuxpackages,python,git,emacs,vim,zsh
 
-### ArchLinuxPackages ###
-*.tar
-*.tar.*
-*.jar
-*.exe
-*.msi
-*.zip
-*.tgz
-*.log
-*.log.*
-*.sig
-
-pkg/
-src/
-
 ### Emacs ###
 # -*- mode: gitignore; -*-
 *~
