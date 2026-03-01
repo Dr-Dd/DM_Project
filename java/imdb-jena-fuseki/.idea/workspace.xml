@@ -5,15 +5,7 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="06918fb6-e39b-414c-9bb9-f597bdf13fbe" name="Changes" comment="Working transactional version, before non-transactional for speedup">
-      <change afterPath="$PROJECT_DIR$/../Dockerfile" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/resources/log4j2.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/resources/simplelogger.properties" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../../compose.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/../../compose.yaml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/pom.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/one/leonardoid/GzipFileReader.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/one/leonardoid/GzipFileReader.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/one/leonardoid/ImdbToJena.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/one/leonardoid/ImdbToJena.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/one/leonardoid/Main.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/one/leonardoid/Main.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/one/leonardoid/TitleBasicsImdbToJena.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/one/leonardoid/TitleBasicsImdbToJena.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/one/leonardoid/TsvFileIngester.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/one/leonardoid/TsvFileIngester.java" afterDir="false" />
     </list>
@@ -63,6 +55,15 @@
       <option name="presentableId" value="Default" />
       <updated>1772197451450</updated>
     </task>
+    <task id="LOCAL-00001" summary="Working transactional version, before non-transactional for speedup">
+      <option name="closed" value="true" />
+      <created>1772402220721</created>
+      <option name="number" value="00001" />
+      <option name="presentableId" value="LOCAL-00001" />
+      <option name="project" value="LOCAL" />
+      <updated>1772402220721</updated>
+    </task>
+    <option name="localTasksCounter" value="2" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">

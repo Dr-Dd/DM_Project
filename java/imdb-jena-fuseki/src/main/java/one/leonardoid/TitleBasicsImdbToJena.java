@@ -53,6 +53,21 @@ public class TitleBasicsImdbToJena extends ImdbToJena {
         System.out.println("TitleBasicsImdbToJena has been prepared.");
     }
 
+/*
+    public void writeNtriple(NamedCsvRecord rec, BufferedWriter writer) {
+        try {
+            // ... same field extraction as before ...
+            String uri = imdbTitleId + tconst;
+            // Write each triple as: <uri> <predicate> "object"^^datatype .
+            // Use NtripleUtils or manual escaping.
+            writer.write("<" + uri + "> <" + schema + "name> \"" + escape(primaryTitle) + "\" .\n");
+            // ... etc.
+        } catch (IOException e) {
+            throw new UncheckedIOException(e);
+        }
+    }
+
+*/
     @Override
     public void ingestRow(NamedCsvRecord rec) {
         try {
