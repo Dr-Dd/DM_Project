@@ -43,40 +43,51 @@ public class TitleBasicsImdbToJena extends ImdbToJena {
 
     @Override
     public void prepareModel(Dataset dataset) {
+        System.out.println("Preparing TitleBasicsImdbToJena...");
         this.movieModel = dataset.getNamedModel("movie");
         this.name = this.movieModel.createProperty(schema, "name");
         this.alternateName = this.movieModel.createProperty(schema, "alternateName");
         this.isFamilyFriendly = this.movieModel.createProperty(schema, "isFamilyFriendly");
         this.datePublished = this.movieModel.createProperty(schema, "datePublished");
         this.genre = this.movieModel.createProperty(schema, "genre");
+        System.out.println("TitleBasicsImdbToJena has been prepared.");
     }
 
     @Override
     public void ingestRow(NamedCsvRecord rec) {
+        try {
+            String tconst = rec.getField("tconst");
+            String titleType = rec.getField("titleType");
+            String primaryTitle = rec.getField("primaryTitle");
+            String originalTitle = rec.getField("originalTitle");
+            String isAdult = rec.getField("isAdult");
+            String startYear = rec.getField("startYear");
+            String[] genres = rec.getField("genres").split(",");
 
-        String tconst = rec.getField("tconst");
-        String titleType = rec.getField("titleType");
-        String primaryTitle = rec.getField("primaryTitle");
-        String originalTitle = rec.getField("originalTitle");
-        String isAdult = rec.getField("isAdult");
-        String startYear = rec.getField("startYear");
-        String[] genres = rec.getField("genres").split(",");
+            String uri = imdbTitleId.concat(tconst);
+            Resource r = movieModel.createResource(uri);
 
-        String uri = imdbTitleId.concat(tconst);
-        Resource r = movieModel.createResource(uri);
-
-        if(!titleType.equals("\\N"))
-            r.addProperty(RDF.type, schema.concat(TYPE_TO_RDF.get(titleType)));
-        if(!primaryTitle.equals("\\N"))
-            r.addProperty(name, primaryTitle);
-        if(!originalTitle.equals("\\N"))
-            r.addProperty(alternateName, originalTitle);
-        if(!isAdult.equals("\\N"))
-            r.addProperty(isFamilyFriendly, isAdult, XSDDatatype.XSDboolean);
-        if(!startYear.equals("\\N"))
-            r.addProperty(datePublished, startYear, XSDDatatype.XSDgYear);
-        if(!genres[0].equals("\\N"))
-            for (String g : genres)
-                r.addProperty(genre, g);
+            if (!titleType.equals("\\N")) {
+                r.addProperty(RDF.type, schema.concat(TYPE_TO_RDF.get(titleType)));
+            }
+            if (!primaryTitle.equals("\\N")) {
+                r.addProperty(name, primaryTitle);
+            }
+            if (!originalTitle.equals("\\N")) {
+                r.addProperty(alternateName, originalTitle);
+            }
+            if (!isAdult.equals("\\N")) {
+                r.addProperty(isFamilyFriendly, String.valueOf(isAdult.equals("0")), XSDDatatype.XSDboolean);
+            }
+            if (!startYear.equals("\\N")) {
+                r.addProperty(datePublished, startYear, XSDDatatype.XSDgYear);
+            }
+            if (!genres[0].equals("\\N"))
+                for (String g : genres) {
+                    r.addProperty(genre, g);
+                }
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
     }
 }

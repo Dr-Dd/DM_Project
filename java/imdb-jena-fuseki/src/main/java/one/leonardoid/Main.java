@@ -5,12 +5,13 @@ import java.nio.file.Path;
 import java.util.Map;
 
 public class Main {
-    static void main() {
+    public static void main(String[] args) {
         TsvFileIngester tfi = new TsvFileIngester(Map.ofEntries(
-                Map.entry(Path.of("data", "title.basics.tar.gz"), new TitleBasicsImdbToJena("UTF-8"))
+                Map.entry(Path.of("/data", "title.basics.tsv.gz"), new TitleBasicsImdbToJena("UTF-8"))
         ));
         try {
-            tfi.ingestAll(Path.of("data", "imdb.dat").toString());
+            System.out.println("Starting import.");
+            tfi.ingestAll(Path.of("/fusekidata", "imdb.dat").toString());
         } catch (IOException e) {
             throw new RuntimeException(e);
         }

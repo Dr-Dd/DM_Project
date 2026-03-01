@@ -5,7 +5,7 @@ import org.apache.jena.query.Dataset;
 
 public abstract class ImdbToJena {
 
-    public String encoding;
+    private final String encoding;
 
     public ImdbToJena(String encoding) {
         this.encoding = encoding;

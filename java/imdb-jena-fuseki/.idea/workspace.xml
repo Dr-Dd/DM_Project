@@ -4,14 +4,16 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="06918fb6-e39b-414c-9bb9-f597bdf13fbe" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
+    <list default="true" id="06918fb6-e39b-414c-9bb9-f597bdf13fbe" name="Changes" comment="Working transactional version, before non-transactional for speedup">
+      <change afterPath="$PROJECT_DIR$/../Dockerfile" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/resources/log4j2.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/resources/simplelogger.properties" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../compose.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/../../compose.yaml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/pom.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/one/leonardoid/GzipFileReader.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/one/leonardoid/GzipFileReader.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/one/leonardoid/ImdbToJena.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/one/leonardoid/ImdbToJena.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/one/leonardoid/Main.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/one/leonardoid/Main.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/one/leonardoid/SVFileReader.java" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/one/leonardoid/TitleBasicsImdbToJena.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/one/leonardoid/TitleBasicsImdbToJena.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/one/leonardoid/TsvFileIngester.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/one/leonardoid/TsvFileIngester.java" afterDir="false" />
     </list>
@@ -62,6 +64,21 @@
       <updated>1772197451450</updated>
     </task>
     <servers />
+  </component>
+  <component name="Vcs.Log.Tabs.Properties">
+    <option name="TAB_STATES">
+      <map>
+        <entry key="MAIN">
+          <value>
+            <State />
+          </value>
+        </entry>
+      </map>
+    </option>
+  </component>
+  <component name="VcsManagerConfiguration">
+    <MESSAGE value="Working transactional version, before non-transactional for speedup" />
+    <option name="LAST_COMMIT_MESSAGE" value="Working transactional version, before non-transactional for speedup" />
   </component>
   <component name="XSLT-Support.FileAssociations.UIState">
     <expand />

@@ -3,11 +3,12 @@ package one.leonardoid;
 import de.siegmar.fastcsv.reader.CsvReader;
 import de.siegmar.fastcsv.reader.NamedCsvRecord;
 import org.apache.jena.query.Dataset;
-import org.apache.jena.query.ReadWrite;
 import org.apache.jena.tdb2.TDB2Factory;
 
 import java.io.IOException;
 import java.nio.file.Path;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 
 public class TsvFileIngester {
@@ -20,35 +21,35 @@ public class TsvFileIngester {
         this.pathJenaMap = pathJenaMap;
     }
 
-    public void ingestAll(String dir) throws IOException {
-        Dataset dataset = TDB2Factory.connectDataset(dir);
-        GzipFileReader r = new GzipFileReader();
+    public void ingestAll(String outFilename) throws IOException {
+        System.out.println("Creating dataset.");
+        Dataset dataset = TDB2Factory.connectDataset(outFilename);
+        System.out.println("Starting ingest.");
         for (Map.Entry<Path, ImdbToJena> e : pathJenaMap.entrySet()) {
-            try (CsvReader<NamedCsvRecord> cr = r.OpenGzipFile(e.getKey().toString(), e.getValue().getEncoding())) {
+            System.out.println("Processing ".concat(e.getKey().toString()));
+            try (CsvReader<NamedCsvRecord> cr = GzipFileReader.openGzipFile(e.getKey().toString(), e.getValue().getEncoding())) {
                 e.getValue().prepareModel(dataset);
-                dataset.begin(ReadWrite.WRITE);
-                long batchCount = 0;
-                try {
-                    for (NamedCsvRecord rec : cr) {
-                        e.getValue().ingestRow(rec);
-                        batchCount++;
-                        if (batchCount >= BATCH_SIZE) {
-                            dataset.commit();
-                            System.out.println("Batch committed");
-                            dataset.end();
-                            dataset.begin(ReadWrite.WRITE);
-                            batchCount = 0;
-                        }
+                List<NamedCsvRecord> batch = new ArrayList<>();
+                cr.forEach(rec -> {
+                    batch.add(rec);
+                    if (batch.size() >= BATCH_SIZE) {
+                        System.out.println("Batch filled.");
+                        this.processBatch(dataset,e.getValue(),batch);
+                        batch.clear();
                     }
-                    dataset.commit();
-                } catch (Exception ex) {
-                    dataset.abort();
-                    throw new RuntimeException(ex);
-                } finally {
-                    dataset.end();
-                }
+                });
+                if(!batch.isEmpty())
+                    this.processBatch(dataset,e.getValue(),batch);
             }
         }
         dataset.close();
+    }
+
+    private void processBatch(Dataset dataset, ImdbToJena converter, List<NamedCsvRecord> batch) {
+        dataset.executeWrite(() -> {
+            for (NamedCsvRecord rec : batch) {
+                converter.ingestRow(rec);
+            }
+        });
     }
 }

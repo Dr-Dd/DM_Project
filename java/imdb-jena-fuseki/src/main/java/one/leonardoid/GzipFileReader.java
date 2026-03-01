@@ -12,12 +12,13 @@ public class GzipFileReader {
     public GzipFileReader() { }
 
 
-    public CsvReader<NamedCsvRecord> OpenGzipFile(String filePath, String encoding) throws IOException {
+    public static CsvReader<NamedCsvRecord> openGzipFile(String filePath, String encoding) throws IOException {
         InputStream inputStream = new FileInputStream(filePath);
+        System.out.println("Opening gzip file.");
         try {
             GZIPInputStream gzipInputStream = new GZIPInputStream(inputStream);
             Reader reader = new InputStreamReader(gzipInputStream, Charset.forName(encoding));
-            return CsvReader.builder().fieldSeparator('\t').ofNamedCsvRecord(reader);
+            return CsvReader.builder().fieldSeparator('\t').quoteCharacter('\0').ofNamedCsvRecord(reader);
         } catch (IOException e) {
             inputStream.close();
             throw e;

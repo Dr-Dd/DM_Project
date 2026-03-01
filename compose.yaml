@@ -44,6 +44,9 @@ services:
     volumes:
       - ./fuseki/logs:/fuseki/logs
       - ./fuseki/databases:/fuseki/databases
+    depends_on:
+      java:
+        condition: service_completed_successfully
     healthcheck:
       test: ["CMD", "wget", "--spider", "-S", "http://localhost:3030/$/ping"]
       interval: 1m
@@ -64,5 +67,14 @@ services:
     volumes:
       - ./data:/data:ro
 
+  java:
+    build: java
+    container_name: java
+    volumes:
+      - ./data:/data:ro
+      - fusekidata:/fusekidata
+
+
 volumes:
     pgdata:
+    fusekidata:
