@@ -4,8 +4,16 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="3b5ba00c-19ae-4482-9b96-e29dca17cca2" name="Changes" comment="">
+    <list default="true" id="06918fb6-e39b-414c-9bb9-f597bdf13fbe" name="Changes" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/pom.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/one/leonardoid/GzipFileReader.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/one/leonardoid/GzipFileReader.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/one/leonardoid/ImdbToJena.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/one/leonardoid/ImdbToJena.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/one/leonardoid/Main.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/one/leonardoid/Main.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/one/leonardoid/SVFileReader.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/one/leonardoid/TitleBasicsImdbToJena.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/one/leonardoid/TitleBasicsImdbToJena.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/one/leonardoid/TsvFileIngester.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/one/leonardoid/TsvFileIngester.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -15,7 +23,6 @@
   <component name="FileTemplateManagerImpl">
     <option name="RECENT_TEMPLATES">
       <list>
-        <option value="Interface" />
         <option value="Class" />
       </list>
     </option>
@@ -23,10 +30,13 @@
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$/../.." />
   </component>
+  <component name="ProblemsViewState">
+    <option name="selectedTabId" value="CurrentFile" />
+  </component>
   <component name="ProjectColorInfo">{
-  &quot;associatedIndex&quot;: 2
+  &quot;associatedIndex&quot;: 7
 }</component>
-  <component name="ProjectId" id="3ACZIXpO6N6jEMAEMei5Gg9SWiJ" />
+  <component name="ProjectId" id="3AFnzoJkOQPgdIQtYjASmb3WxSv" />
   <component name="ProjectViewState">
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
@@ -35,40 +45,26 @@
   &quot;keyToString&quot;: {
     &quot;ModuleVcsDetector.initialDetectionPerformed&quot;: &quot;true&quot;,
     &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.TerminalTabsStorage.copyFrom.TerminalArrangementManager.252&quot;: &quot;true&quot;,
     &quot;RunOnceActivity.git.unshallow&quot;: &quot;true&quot;,
     &quot;git-widget-placeholder&quot;: &quot;main&quot;,
     &quot;kotlin-language-version-configured&quot;: &quot;true&quot;,
-    &quot;onboarding.tips.debug.path&quot;: &quot;/home/drd/repos/DM_Project/java/imdb-jena-fuseki/src/main/java/one/leonardoid/Main.java&quot;,
-    &quot;project.structure.last.edited&quot;: &quot;Project&quot;,
-    &quot;project.structure.proportion&quot;: &quot;0.0&quot;,
-    &quot;project.structure.side.proportion&quot;: &quot;0.0&quot;,
-    &quot;settings.editor.selected.configurable&quot;: &quot;editor.preferences.fonts.default&quot;
+    &quot;last_opened_file_path&quot;: &quot;/home/drd/repos/DM_Project/java/imdb-jena-fuseki/pom.xml&quot;,
+    &quot;settings.editor.selected.configurable&quot;: &quot;preferences.sourceCode.JAVA&quot;
   }
 }</component>
-  <component name="RecentsManager">
-    <key name="CreateClassDialog.RecentsKey">
-      <recent name="one.leonardoid" />
-    </key>
-  </component>
   <component name="TaskManager">
     <task active="true" id="Default" summary="Default task">
-      <changelist id="3b5ba00c-19ae-4482-9b96-e29dca17cca2" name="Changes" comment="" />
-      <created>1772098047775</created>
+      <changelist id="06918fb6-e39b-414c-9bb9-f597bdf13fbe" name="Changes" comment="" />
+      <created>1772197451450</created>
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
-      <updated>1772098047775</updated>
+      <updated>1772197451450</updated>
     </task>
     <servers />
   </component>
-  <component name="XDebuggerManager">
-    <breakpoint-manager>
-      <breakpoints>
-        <line-breakpoint enabled="true" type="java-line">
-          <url>file://$PROJECT_DIR$/src/main/java/one/leonardoid/Main.java</url>
-          <line>13</line>
-          <option name="timeStamp" value="1" />
-        </line-breakpoint>
-      </breakpoints>
-    </breakpoint-manager>
+  <component name="XSLT-Support.FileAssociations.UIState">
+    <expand />
+    <select />
   </component>
 </project>

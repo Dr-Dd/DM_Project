@@ -1,17 +1,19 @@
 package one.leonardoid;
 
-//TIP To <b>Run</b> code, press <shortcut actionId="Run"/> or
-// click the <icon src="AllIcons.Actions.Execute"/> icon in the gutter.
+import java.io.IOException;
+import java.nio.file.Path;
+import java.util.Map;
+
 public class Main {
     static void main() {
-        //TIP Press <shortcut actionId="ShowIntentionActions"/> with your caret at the highlighted text
-        // to see how IntelliJ IDEA suggests fixing it.
-        IO.println(String.format("Hello and welcome!"));
-
-        for (int i = 1; i <= 5; i++) {
-            //TIP Press <shortcut actionId="Debug"/> to start debugging your code. We have set one <icon src="AllIcons.Debugger.Db_set_breakpoint"/> breakpoint
-            // for you, but you can always add more by pressing <shortcut actionId="ToggleLineBreakpoint"/>.
-            IO.println("i = " + i);
+        TsvFileIngester tfi = new TsvFileIngester(Map.ofEntries(
+                Map.entry(Path.of("data", "title.basics.tar.gz"), new TitleBasicsImdbToJena("UTF-8"))
+        ));
+        try {
+            tfi.ingestAll(Path.of("data", "imdb.dat").toString());
+        } catch (IOException e) {
+            throw new RuntimeException(e);
         }
     }
 }
+
