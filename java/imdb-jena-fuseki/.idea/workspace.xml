@@ -4,10 +4,9 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="06918fb6-e39b-414c-9bb9-f597bdf13fbe" name="Changes" comment="">
+    <list default="true" id="06918fb6-e39b-414c-9bb9-f597bdf13fbe" name="Changes" comment="Working but still slow fastgraph based solution">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/one/leonardoid/ImdbToJena.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/one/leonardoid/ImdbToJena.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/one/leonardoid/Main.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/one/leonardoid/Main.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/one/leonardoid/TitleBasicsImdbToJena.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/one/leonardoid/TitleBasicsImdbToJena.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/one/leonardoid/TsvFileIngester.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/one/leonardoid/TsvFileIngester.java" afterDir="false" />
     </list>
@@ -73,7 +72,15 @@
       <option name="project" value="LOCAL" />
       <updated>1772403626217</updated>
     </task>
-    <option name="localTasksCounter" value="3" />
+    <task id="LOCAL-00003" summary="Working but still slow fastgraph based solution">
+      <option name="closed" value="true" />
+      <created>1772479258134</created>
+      <option name="number" value="00003" />
+      <option name="presentableId" value="LOCAL-00003" />
+      <option name="project" value="LOCAL" />
+      <updated>1772479258134</updated>
+    </task>
+    <option name="localTasksCounter" value="4" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -89,7 +96,8 @@
   </component>
   <component name="VcsManagerConfiguration">
     <MESSAGE value="Working transactional version, before non-transactional for speedup" />
-    <option name="LAST_COMMIT_MESSAGE" value="Working transactional version, before non-transactional for speedup" />
+    <MESSAGE value="Working but still slow fastgraph based solution" />
+    <option name="LAST_COMMIT_MESSAGE" value="Working but still slow fastgraph based solution" />
   </component>
   <component name="XSLT-Support.FileAssociations.UIState">
     <expand />

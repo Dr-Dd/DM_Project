@@ -2,9 +2,10 @@ package one.leonardoid;
 
 import de.siegmar.fastcsv.reader.NamedCsvRecord;
 import org.apache.jena.datatypes.xsd.XSDDatatype;
-import org.apache.jena.graph.Graph;
 import org.apache.jena.graph.Node;
 import org.apache.jena.graph.NodeFactory;
+import org.apache.jena.graph.Triple;
+import org.apache.jena.riot.system.StreamRDF;
 import org.apache.jena.vocabulary.RDF;
 import org.apache.jena.vocabulary.SchemaDO;
 
@@ -32,7 +33,7 @@ public class TitleBasicsImdbToJena extends ImdbToJena {
     }
 
     @Override
-    public void rowToNT(NamedCsvRecord rec, Graph gr) {
+    public void rowToNT(NamedCsvRecord rec, StreamRDF srdf) {
         try {
             String tconst = rec.getField("tconst");
             String titleType = rec.getField("titleType");
@@ -40,29 +41,29 @@ public class TitleBasicsImdbToJena extends ImdbToJena {
             String originalTitle = rec.getField("originalTitle");
             String isAdult = rec.getField("isAdult");
             String startYear = rec.getField("startYear");
-            String[] genres = rec.getField("genres").split(",");
+            String genres = rec.getField("genres");
 
             String uri = "https://www.imdb.com/title/".concat(tconst);
             Node r = NodeFactory.createURI(uri);
 
             if (!titleType.equals("\\N")) {
-                gr.add(r,RDF.type.asNode(), TYPE_TO_RDF.get(titleType) );
+                srdf.triple(Triple.create(r,RDF.type.asNode(), TYPE_TO_RDF.get(titleType)));
             }
             if (!primaryTitle.equals("\\N")) {
-                gr.add(r, SchemaDO.name.asNode(), NodeFactory.createLiteralByValue(primaryTitle));
+                srdf.triple(Triple.create(r, SchemaDO.name.asNode(), NodeFactory.createLiteralByValue(primaryTitle)));
             }
             if (!originalTitle.equals("\\N")) {
-                gr.add(r, SchemaDO.alternateName.asNode(), NodeFactory.createLiteralByValue(originalTitle));
+                srdf.triple(Triple.create(r, SchemaDO.alternateName.asNode(), NodeFactory.createLiteralByValue(originalTitle)));
             }
             if (!isAdult.equals("\\N")) {
-                gr.add(r, SchemaDO.isFamilyFriendly.asNode(), NodeFactory.createLiteralByValue(isAdult.equals("0")));
+                srdf.triple(Triple.create(r, SchemaDO.isFamilyFriendly.asNode(), NodeFactory.createLiteralByValue(isAdult.equals("0"))));
             }
             if (!startYear.equals("\\N")) {
-                gr.add(r, SchemaDO.datePublished.asNode(), NodeFactory.createLiteralByValue(startYear, XSDDatatype.XSDgYear));
+                srdf.triple(Triple.create(r, SchemaDO.datePublished.asNode(), NodeFactory.createLiteralByValue(startYear, XSDDatatype.XSDgYear)));
             }
-            if (!genres[0].equals("\\N"))
-                for (String g : genres) {
-                    gr.add(r, SchemaDO.genre.asNode(), NodeFactory.createLiteralByValue(g));
+            if (!genres.equals("\\N"))
+                for (String g : genres.split(",")) {
+                    srdf.triple(Triple.create(r, SchemaDO.genre.asNode(), NodeFactory.createLiteralByValue(g)));
                 }
         } catch (Exception e) {
             throw new RuntimeException(e);
