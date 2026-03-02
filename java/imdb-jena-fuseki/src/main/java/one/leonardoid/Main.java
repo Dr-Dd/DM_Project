@@ -11,7 +11,7 @@ public class Main {
         ));
         try {
             System.out.println("Starting import.");
-            tfi.ingestAllNT(Path.of("/imdb.nt").toString());
+            tfi.ingestAllNT();
         } catch (IOException e) {
             throw new RuntimeException(e);
         }

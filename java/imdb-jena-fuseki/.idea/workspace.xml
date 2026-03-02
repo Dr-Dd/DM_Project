@@ -4,10 +4,11 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="06918fb6-e39b-414c-9bb9-f597bdf13fbe" name="Changes" comment="Working but still slow fastgraph based solution">
+    <list default="true" id="06918fb6-e39b-414c-9bb9-f597bdf13fbe" name="Changes" comment="Switched to large buffers, bufferedStreams, gzipped output. Comparably as fast as before optimization">
+      <change beforePath="$PROJECT_DIR$/../../compose.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/../../compose.yaml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/one/leonardoid/ImdbToJena.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/one/leonardoid/ImdbToJena.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/one/leonardoid/TitleBasicsImdbToJena.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/one/leonardoid/TitleBasicsImdbToJena.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/one/leonardoid/GzipFileReader.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/one/leonardoid/GzipFileReader.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/one/leonardoid/Main.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/one/leonardoid/Main.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/one/leonardoid/TsvFileIngester.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/one/leonardoid/TsvFileIngester.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -80,7 +81,15 @@
       <option name="project" value="LOCAL" />
       <updated>1772479258134</updated>
     </task>
-    <option name="localTasksCounter" value="4" />
+    <task id="LOCAL-00004" summary="Working but still slow fastgraph based solution">
+      <option name="closed" value="true" />
+      <created>1772485895753</created>
+      <option name="number" value="00004" />
+      <option name="presentableId" value="LOCAL-00004" />
+      <option name="project" value="LOCAL" />
+      <updated>1772485895753</updated>
+    </task>
+    <option name="localTasksCounter" value="5" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -97,7 +106,8 @@
   <component name="VcsManagerConfiguration">
     <MESSAGE value="Working transactional version, before non-transactional for speedup" />
     <MESSAGE value="Working but still slow fastgraph based solution" />
-    <option name="LAST_COMMIT_MESSAGE" value="Working but still slow fastgraph based solution" />
+    <MESSAGE value="Switched to large buffers, bufferedStreams, gzipped output. Comparably as fast as before optimization" />
+    <option name="LAST_COMMIT_MESSAGE" value="Switched to large buffers, bufferedStreams, gzipped output. Comparably as fast as before optimization" />
   </component>
   <component name="XSLT-Support.FileAssociations.UIState">
     <expand />

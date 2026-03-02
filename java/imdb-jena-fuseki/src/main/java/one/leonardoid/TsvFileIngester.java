@@ -9,6 +9,7 @@ import org.apache.jena.riot.system.StreamRDFWriter;
 import java.io.*;
 import java.nio.file.Path;
 import java.util.Map;
+import java.util.zip.GZIPOutputStream;
 
 public class TsvFileIngester {
 
@@ -18,23 +19,31 @@ public class TsvFileIngester {
         this.pathJenaMap = pathJenaMap;
     }
 
+    private static Path convertTsvGzToNtGz(Path file) {
+        String filename = file.toString();
+        if (!filename.endsWith(".tsv.gz")) {
+            throw new IllegalArgumentException("Expected .tsv.gz, got: " + filename);
+        }
+        return Path.of(filename.substring(0, filename.length() - 7) + ".nt.gz");
+    }
 
 
-    public void ingestAllNT(String outFilename) throws IOException {
-        try(OutputStream out = new BufferedOutputStream(new FileOutputStream(outFilename))) {
-            StreamRDF srdf = StreamRDFWriter.getWriterStream(out, Lang.NTRIPLES);
-            srdf.start();
-            for (Map.Entry<Path, ImdbToJena> e : pathJenaMap.entrySet()) {
-                System.out.println("Processing ".concat(e.getKey().toString()));
-                try (CsvReader<NamedCsvRecord> cr = GzipFileReader.openGzipFile( e.getKey().toString(), e.getValue().getEncoding())) {
-                    cr.forEach(rec -> {
-                        e.getValue().rowToNT(rec, srdf);
-                    });
+    public void ingestAllNT() throws IOException {
+        for (Map.Entry<Path, ImdbToJena> e : pathJenaMap.entrySet()) {
+            try(FileOutputStream fos = new FileOutputStream(convertTsvGzToNtGz(e.getKey()).toString());
+                GZIPOutputStream gzos = new GZIPOutputStream(fos, 1024 * 64);
+                BufferedOutputStream out = new BufferedOutputStream(gzos, 1024 * 64)) {
+                StreamRDF srdf = StreamRDFWriter.getWriterStream(out, Lang.NTRIPLES);
+                System.out.println("Processing ".concat(e.getKey().toString()).concat("."));
+                srdf.start();
+                try (CsvReader<NamedCsvRecord> cr = GzipFileReader.openGzipFile(e.getKey().toString())) {
+                    cr.forEach(rec ->
+                        e.getValue().rowToNT(rec, srdf)
+                    );
+                } finally {
+                    srdf.finish();
                 }
             }
-            srdf.finish();
-        } catch (Exception e) {
-            throw new RuntimeException(e);
         }
     }
 }

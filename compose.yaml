@@ -65,13 +65,13 @@ services:
       postgres:
         condition: service_healthy
     volumes:
-      - ./data:/data:ro
+      - ./data:/data
 
   java:
     build: java
     container_name: java
     volumes:
-      - ./data:/data:ro
+      - ./data:/data
       - fusekidata:/fusekidata
 
 

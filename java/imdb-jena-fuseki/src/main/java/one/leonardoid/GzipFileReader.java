@@ -4,24 +4,21 @@ import de.siegmar.fastcsv.reader.CsvReader;
 import de.siegmar.fastcsv.reader.NamedCsvRecord;
 
 import java.io.*;
-import java.nio.charset.Charset;
 import java.util.zip.GZIPInputStream;
 
 public class GzipFileReader {
 
     public GzipFileReader() { }
 
-
-    public static CsvReader<NamedCsvRecord> openGzipFile(String filePath, String encoding) throws IOException {
-        InputStream inputStream = new FileInputStream(filePath);
-        System.out.println("Opening gzip file.");
+    public static CsvReader<NamedCsvRecord> openGzipFile(String filePath) {
+        System.out.println("Opening gzip file ".concat(filePath).concat("."));
         try {
-            GZIPInputStream gzipInputStream = new GZIPInputStream(inputStream);
-            Reader reader = new InputStreamReader(gzipInputStream, Charset.forName(encoding));
-            return CsvReader.builder().fieldSeparator('\t').quoteCharacter('\0').ofNamedCsvRecord(reader);
-        } catch (IOException e) {
-            inputStream.close();
-            throw e;
+            FileInputStream fis = new FileInputStream(filePath);
+            GZIPInputStream gzis = new GZIPInputStream(fis, 1024 * 64);
+            BufferedInputStream in = new BufferedInputStream(gzis, 1024 * 64);
+            return CsvReader.builder().fieldSeparator('\t').quoteCharacter('\0').ofNamedCsvRecord(in);
+        } catch (Exception e) {
+            throw new RuntimeException(e);
         }
     }
 }
