@@ -3,10 +3,14 @@ package one.leonardoid;
 import de.siegmar.fastcsv.reader.CsvReader;
 import de.siegmar.fastcsv.reader.NamedCsvRecord;
 import org.apache.jena.query.Dataset;
+import org.apache.jena.riot.RDFDataMgr;
 import org.apache.jena.tdb2.TDB2Factory;
 
-import java.io.IOException;
+import java.io.*;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
 import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -21,32 +25,20 @@ public class TsvFileIngester {
         this.pathJenaMap = pathJenaMap;
     }
 
-/*
-    public void ingestAll(String outFilename) throws IOException {
-        Path tempNtriples = Files.createTempFile("imdb-", ".nt");
-        try {
-            // Write N-Triples to temporary file
-            try (BufferedWriter writer = Files.newBufferedWriter(tempNtriples, StandardCharsets.UTF_8)) {
-                for (Map.Entry<Path, ImdbToJena> e : pathJenaMap.entrySet()) {
-                    System.out.println("Converting " + e.getKey());
-                    try (CsvReader<NamedCsvRecord> cr = GzipFileReader.openGzipFile(e.getKey().toString(), e.getValue().getEncoding())) {
-                        TitleBasicsImdbToJena converter = (TitleBasicsImdbToJena) e.getValue(); // cast as needed
-                        cr.forEach(rec -> converter.writeNtriple(rec, writer));
-                    }
+    public void ingestAllNT(String outFilename) throws IOException {
+        try(OutputStream out = new BufferedOutputStream(new FileOutputStream("/data/imdb.nt"))) {
+            for (Map.Entry<Path, ImdbToJena> e : pathJenaMap.entrySet()) {
+                System.out.println("Processing ".concat(e.getKey().toString()));
+                try (CsvReader<NamedCsvRecord> cr = GzipFileReader.openGzipFile( e.getKey().toString(), e.getValue().getEncoding())) {
+                    cr.forEach(rec -> {
+                        RDFDataMgr.write(out, e.getValue().rowToNT(rec));
+                    });
                 }
             }
-
-            // Bulk load into TDB2
-            System.out.println("Bulk loading into TDB2...");
-            Dataset dataset = TDB2Factory.connectDataset(outFilename);
-            TDB2Loader.load(dataset, tempNtriples.toFile(), "http://example.org/movie"); // graph IRI
-            dataset.close();
-
-        } finally {
-            Files.deleteIfExists(tempNtriples);
+        } catch (Exception e) {
+            throw new RuntimeException(e);
         }
     }
-*/
 
     public void ingestAll(String outFilename) throws IOException {
         System.out.println("Creating dataset.");

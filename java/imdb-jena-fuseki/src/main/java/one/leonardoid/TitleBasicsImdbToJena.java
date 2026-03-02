@@ -8,6 +8,7 @@ import org.apache.jena.rdf.model.Property;
 import org.apache.jena.rdf.model.Resource;
 import org.apache.jena.vocabulary.RDF;
 
+import java.io.BufferedWriter;
 import java.util.Map;
 
 
@@ -53,21 +54,33 @@ public class TitleBasicsImdbToJena extends ImdbToJena {
         System.out.println("TitleBasicsImdbToJena has been prepared.");
     }
 
-/*
-    public void writeNtriple(NamedCsvRecord rec, BufferedWriter writer) {
-        try {
-            // ... same field extraction as before ...
-            String uri = imdbTitleId + tconst;
-            // Write each triple as: <uri> <predicate> "object"^^datatype .
-            // Use NtripleUtils or manual escaping.
-            writer.write("<" + uri + "> <" + schema + "name> \"" + escape(primaryTitle) + "\" .\n");
-            // ... etc.
-        } catch (IOException e) {
-            throw new UncheckedIOException(e);
-        }
+    @Override
+    public String rowToNT(NamedCsvRecord rec, BufferedWriter bw) {
+        String tconst = rec.getField("tconst");
+        String titleType = rec.getField("titleType");
+        String primaryTitle = rec.getField("primaryTitle");
+        String originalTitle = rec.getField("originalTitle");
+        String isAdult = rec.getField("isAdult");
+        String startYear = rec.getField("startYear");
+        String[] genres = rec.getField("genres").split(",");
+        return "";
     }
 
-*/
+    /*
+        public void writeNtriple(NamedCsvRecord rec, BufferedWriter writer) {
+            try {
+                // ... same field extraction as before ...
+                String uri = imdbTitleId + tconst;
+                // Write each triple as: <uri> <predicate> "object"^^datatype .
+                // Use NtripleUtils or manual escaping.
+                writer.write("<" + uri + "> <" + schema + "name> \"" + escape(primaryTitle) + "\" .\n");
+                // ... etc.
+            } catch (IOException e) {
+                throw new UncheckedIOException(e);
+            }
+        }
+
+    */
     @Override
     public void ingestRow(NamedCsvRecord rec) {
         try {
