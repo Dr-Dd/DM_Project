@@ -11,7 +11,7 @@ public class Main {
         ));
         try {
             System.out.println("Starting import.");
-            tfi.ingestAll(Path.of("/fusekidata", "imdb.dat").toString());
+            tfi.ingestAllNT(Path.of("/imdb.nt").toString());
         } catch (IOException e) {
             throw new RuntimeException(e);
         }

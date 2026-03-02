@@ -2,87 +2,37 @@ package one.leonardoid;
 
 import de.siegmar.fastcsv.reader.NamedCsvRecord;
 import org.apache.jena.datatypes.xsd.XSDDatatype;
-import org.apache.jena.query.Dataset;
-import org.apache.jena.rdf.model.Model;
-import org.apache.jena.rdf.model.Property;
-import org.apache.jena.rdf.model.Resource;
+import org.apache.jena.graph.Graph;
+import org.apache.jena.graph.Node;
+import org.apache.jena.graph.NodeFactory;
 import org.apache.jena.vocabulary.RDF;
+import org.apache.jena.vocabulary.SchemaDO;
 
-import java.io.BufferedWriter;
 import java.util.Map;
 
 
 public class TitleBasicsImdbToJena extends ImdbToJena {
 
-    private static final String imdbTitleId = "https://imdb.com/title/";
-    private static final String schema = "https://schema.org/";
-
-    private static final Map<String, String> TYPE_TO_RDF = Map.ofEntries(
-            Map.entry( "movie", "Movie"),
-            Map.entry("short", "Movie"),
-            Map.entry("tvEpisode","TVEpisode"),
-            Map.entry("tvMiniSeries","TVSeries"),
-            Map.entry("tvMovie","Movie"),
-            Map.entry("tvPilot","TVEpisode"),
-            Map.entry("tvSeries","TVSeries"),
-            Map.entry("tvShort","Movie"),
-            Map.entry("tvSpecial","Movie"),
-            Map.entry("video","Movie"),
-            Map.entry("videoGame","VideoGame")
+    private static final Map<String, Node> TYPE_TO_RDF = Map.ofEntries(
+            Map.entry("movie", SchemaDO.Movie.asNode()),
+            Map.entry("short",SchemaDO.Movie.asNode()),
+            Map.entry("tvEpisode",SchemaDO.TVEpisode.asNode()),
+            Map.entry("tvMiniSeries",SchemaDO.TVSeries.asNode()),
+            Map.entry("tvMovie",SchemaDO.Movie.asNode()),
+            Map.entry("tvPilot",SchemaDO.TVEpisode.asNode()),
+            Map.entry("tvSeries",SchemaDO.TVSeries.asNode()),
+            Map.entry("tvShort",SchemaDO.Movie.asNode()),
+            Map.entry("tvSpecial",SchemaDO.Movie.asNode()),
+            Map.entry("video",SchemaDO.Movie.asNode()),
+            Map.entry("videoGame",SchemaDO.VideoGame.asNode())
     );
-
-    private Model movieModel;
-    private Property name;
-    private Property alternateName;
-    private Property isFamilyFriendly;
-    private Property datePublished;
-    private Property genre;
 
     public TitleBasicsImdbToJena(String encoding) {
         super(encoding);
     }
 
     @Override
-    public void prepareModel(Dataset dataset) {
-        System.out.println("Preparing TitleBasicsImdbToJena...");
-        this.movieModel = dataset.getNamedModel("movie");
-        this.name = this.movieModel.createProperty(schema, "name");
-        this.alternateName = this.movieModel.createProperty(schema, "alternateName");
-        this.isFamilyFriendly = this.movieModel.createProperty(schema, "isFamilyFriendly");
-        this.datePublished = this.movieModel.createProperty(schema, "datePublished");
-        this.genre = this.movieModel.createProperty(schema, "genre");
-        System.out.println("TitleBasicsImdbToJena has been prepared.");
-    }
-
-    @Override
-    public String rowToNT(NamedCsvRecord rec, BufferedWriter bw) {
-        String tconst = rec.getField("tconst");
-        String titleType = rec.getField("titleType");
-        String primaryTitle = rec.getField("primaryTitle");
-        String originalTitle = rec.getField("originalTitle");
-        String isAdult = rec.getField("isAdult");
-        String startYear = rec.getField("startYear");
-        String[] genres = rec.getField("genres").split(",");
-        return "";
-    }
-
-    /*
-        public void writeNtriple(NamedCsvRecord rec, BufferedWriter writer) {
-            try {
-                // ... same field extraction as before ...
-                String uri = imdbTitleId + tconst;
-                // Write each triple as: <uri> <predicate> "object"^^datatype .
-                // Use NtripleUtils or manual escaping.
-                writer.write("<" + uri + "> <" + schema + "name> \"" + escape(primaryTitle) + "\" .\n");
-                // ... etc.
-            } catch (IOException e) {
-                throw new UncheckedIOException(e);
-            }
-        }
-
-    */
-    @Override
-    public void ingestRow(NamedCsvRecord rec) {
+    public void rowToNT(NamedCsvRecord rec, Graph gr) {
         try {
             String tconst = rec.getField("tconst");
             String titleType = rec.getField("titleType");
@@ -92,27 +42,27 @@ public class TitleBasicsImdbToJena extends ImdbToJena {
             String startYear = rec.getField("startYear");
             String[] genres = rec.getField("genres").split(",");
 
-            String uri = imdbTitleId.concat(tconst);
-            Resource r = movieModel.createResource(uri);
+            String uri = "https://www.imdb.com/title/".concat(tconst);
+            Node r = NodeFactory.createURI(uri);
 
             if (!titleType.equals("\\N")) {
-                r.addProperty(RDF.type, schema.concat(TYPE_TO_RDF.get(titleType)));
+                gr.add(r,RDF.type.asNode(), TYPE_TO_RDF.get(titleType) );
             }
             if (!primaryTitle.equals("\\N")) {
-                r.addProperty(name, primaryTitle);
+                gr.add(r, SchemaDO.name.asNode(), NodeFactory.createLiteralByValue(primaryTitle));
             }
             if (!originalTitle.equals("\\N")) {
-                r.addProperty(alternateName, originalTitle);
+                gr.add(r, SchemaDO.alternateName.asNode(), NodeFactory.createLiteralByValue(originalTitle));
             }
             if (!isAdult.equals("\\N")) {
-                r.addProperty(isFamilyFriendly, String.valueOf(isAdult.equals("0")), XSDDatatype.XSDboolean);
+                gr.add(r, SchemaDO.isFamilyFriendly.asNode(), NodeFactory.createLiteralByValue(isAdult.equals("0")));
             }
             if (!startYear.equals("\\N")) {
-                r.addProperty(datePublished, startYear, XSDDatatype.XSDgYear);
+                gr.add(r, SchemaDO.datePublished.asNode(), NodeFactory.createLiteralByValue(startYear, XSDDatatype.XSDgYear));
             }
             if (!genres[0].equals("\\N"))
                 for (String g : genres) {
-                    r.addProperty(genre, g);
+                    gr.add(r, SchemaDO.genre.asNode(), NodeFactory.createLiteralByValue(g));
                 }
         } catch (Exception e) {
             throw new RuntimeException(e);

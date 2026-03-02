@@ -1,9 +1,7 @@
 package one.leonardoid;
 
 import de.siegmar.fastcsv.reader.NamedCsvRecord;
-import org.apache.jena.graph.Triple;
-import org.apache.jena.query.Dataset;
-import java.util.Iterator;
+import org.apache.jena.graph.Graph;
 
 public abstract class ImdbToJena {
 
@@ -17,9 +15,5 @@ public abstract class ImdbToJena {
         return encoding;
     }
 
-    public abstract void prepareModel(Dataset dataset);
-
-    public abstract Iterator<Triple> rowToNT(NamedCsvRecord rec);
-
-    public abstract void ingestRow(NamedCsvRecord rec);
+    public abstract void rowToNT(NamedCsvRecord rec, Graph gr);
 }
