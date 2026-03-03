@@ -25,7 +25,7 @@ public class NameBasicsImdbToJena extends ImdbToJena {
             String primaryProfessions = rec.getField("primaryProfession");
             String knownForTitles = rec.getField("knownForTitles");
 
-            Node r = NodeFactory.createURI(ImdbSchema.name.getURI().concat(nconst));
+            Node r = NodeFactory.createURI(ImdbSchema.name.getURI() + "/" + nconst);
 
             if(!nconst.equals("\\N"))
                 srdf.triple(Triple.create(r, RDF.type.asNode(), SchemaDO.Person.asNode()));
@@ -40,7 +40,7 @@ public class NameBasicsImdbToJena extends ImdbToJena {
                     srdf.triple(Triple.create(r, SchemaDO.jobTitle.asNode(), NodeFactory.createLiteralByValue(profession)));
             if(!knownForTitles.equals("\\N"))
                 for(String title : knownForTitles.split(","))
-                    srdf.triple(Triple.create( NodeFactory.createURI(ImdbSchema.title.getURI().concat(title)), SchemaDO.actor.asNode(), r ));
+                    srdf.triple(Triple.create( NodeFactory.createURI(ImdbSchema.title.getURI() + "/" + title), SchemaDO.actor.asNode(), r ));
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
