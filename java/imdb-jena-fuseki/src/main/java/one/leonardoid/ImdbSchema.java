@@ -11,7 +11,7 @@ public class ImdbSchema {
     public static final Resource name;
 
     static {
-        title = m.createResource("https://www.imdb.org/title");
-        name = m.createResource("https://www.imdb.org/name");
+        title = m.createResource("https://www.imdb.com/title");
+        name = m.createResource("https://www.imdb.com/name");
     }
 }

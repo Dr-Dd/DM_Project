@@ -34,7 +34,7 @@ public class NameBasicsImdbToJena extends ImdbToJena {
             if(!birthYear.equals("\\N"))
                 srdf.triple(Triple.create(r, SchemaDO.birthDate.asNode(), NodeFactory.createLiteralByValue(birthYear, XSDDatatype.XSDgYear)));
             if(!deathYear.equals("\\N"))
-                srdf.triple(Triple.create(r, SchemaDO.deathDate.asNode(), NodeFactory.createLiteralByValue(birthYear, XSDDatatype.XSDgYear)));
+                srdf.triple(Triple.create(r, SchemaDO.deathDate.asNode(), NodeFactory.createLiteralByValue(deathYear, XSDDatatype.XSDgYear)));
             if(!primaryProfessions.equals("\\N"))
                 for(String profession : primaryProfessions.split(","))
                     srdf.triple(Triple.create(r, SchemaDO.jobTitle.asNode(), NodeFactory.createLiteralByValue(profession)));
