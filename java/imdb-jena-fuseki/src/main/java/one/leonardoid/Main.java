@@ -7,7 +7,8 @@ import java.util.Map;
 public class Main {
     public static void main(String[] args) {
         TsvFileIngester tfi = new TsvFileIngester(Map.ofEntries(
-                Map.entry(Path.of("/data", "title.basics.tsv.gz"), new TitleBasicsImdbToJena("UTF-8"))
+                Map.entry(Path.of("/data", "title.basics.tsv.gz"), new TitleBasicsImdbToJena()),
+                Map.entry(Path.of("/data", "name.basics.tsv.gz"), new NameBasicsImdbToJena())
         ));
         try {
             System.out.println("Starting import.");

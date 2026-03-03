@@ -28,8 +28,8 @@ public class TitleBasicsImdbToJena extends ImdbToJena {
             Map.entry("videoGame",SchemaDO.VideoGame.asNode())
     );
 
-    public TitleBasicsImdbToJena(String encoding) {
-        super(encoding);
+    public TitleBasicsImdbToJena() {
+        super();
     }
 
     @Override
@@ -43,8 +43,7 @@ public class TitleBasicsImdbToJena extends ImdbToJena {
             String startYear = rec.getField("startYear");
             String genres = rec.getField("genres");
 
-            String uri = "https://www.imdb.com/title/".concat(tconst);
-            Node r = NodeFactory.createURI(uri);
+            Node r = NodeFactory.createURI(ImdbSchema.title.getURI().concat(tconst));
 
             if (!titleType.equals("\\N")) {
                 srdf.triple(Triple.create(r,RDF.type.asNode(), TYPE_TO_RDF.get(titleType)));
@@ -62,9 +61,8 @@ public class TitleBasicsImdbToJena extends ImdbToJena {
                 srdf.triple(Triple.create(r, SchemaDO.datePublished.asNode(), NodeFactory.createLiteralByValue(startYear, XSDDatatype.XSDgYear)));
             }
             if (!genres.equals("\\N"))
-                for (String g : genres.split(",")) {
+                for (String g : genres.split(","))
                     srdf.triple(Triple.create(r, SchemaDO.genre.asNode(), NodeFactory.createLiteralByValue(g)));
-                }
         } catch (Exception e) {
             throw new RuntimeException(e);
         }

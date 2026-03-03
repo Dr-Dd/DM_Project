@@ -42,6 +42,7 @@ public class TsvFileIngester {
                     );
                 } finally {
                     srdf.finish();
+                    System.out.println("Finished processing ".concat(e.getKey().toString()).concat("."));
                 }
             }
         }
