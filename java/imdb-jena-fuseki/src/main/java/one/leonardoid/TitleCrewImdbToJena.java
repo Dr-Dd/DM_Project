@@ -26,13 +26,10 @@ public class TitleCrewImdbToJena extends ImdbToJena {
             if(!writers.equals("\\N"))
                 for(String writer  : writers.split(",")) {
                     Node writerNode = NodeFactory.createURI(ImdbSchema.name.getURI() + "/" + writer);
-                    srdf.triple(Triple.create(r, SchemaDO.author.asNode(), writerNode));
+                    srdf.triple(Triple.create(r, SchemaDO.creator.asNode(), writerNode));
                 }
-
-
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
-
     }
 }
