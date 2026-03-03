@@ -43,7 +43,7 @@ public class TitleBasicsImdbToJena extends ImdbToJena {
             String startYear = rec.getField("startYear");
             String genres = rec.getField("genres");
 
-            Node r = NodeFactory.createURI(ImdbSchema.title.getURI().concat(tconst));
+            Node r = NodeFactory.createURI(ImdbSchema.title.getURI() + "/" + tconst);
 
             if (!titleType.equals("\\N")) {
                 srdf.triple(Triple.create(r,RDF.type.asNode(), TYPE_TO_RDF.get(titleType)));
