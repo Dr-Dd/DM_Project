@@ -9,10 +9,6 @@ import org.apache.jena.vocabulary.SchemaDO;
 
 public class TitleAkasImdbToJena extends ImdbToJena {
 
-    public TitleAkasImdbToJena() {
-        super();
-    }
-
     @Override
     public void rowToNT(NamedCsvRecord rec, StreamRDF srdf) {
         try {
