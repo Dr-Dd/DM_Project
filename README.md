@@ -3,12 +3,6 @@ Comparison of a RDBMS and Triplestore in the representation of IMDb's datasets.
 
 ## Premise
 
-Let's imagine that we are a small cultural preservation consortium,
-and we want to archive digitally the many movies in our possession. To
-do so, we hire a software engineer to create a database for us. The
-idea is not only to digitally save the movies in a filesystem, but
-also be able to navigate the archive by filtering via the various
-elements that compose a movie. Specifically, we are interested in the
-following elements of a movie. Let's say he settles on a relation
-database approach, and comes back with the following E-R diagram of
-our archive after a few days.
+The project takes the IMDb's Non-Commercial datasets, converts them in the two formats required respectively for each database and serves a PostgreSQL and Apache Jena Fuseki local endpoint. All of this is orchestrated via docker compose. The apache jena fuseki dataset has been built via tdb2.xloader and needs to be loaded separately in the named volume after local ingestion. You could modify the compose to include your own loading image. The PostgreSQL dataset is generated and piped via the COPY protocol during conversion at startup, this step is ignored if the database is already populated.
+
+To explore the SPARQL endpoint feel free to spin up yasgui.org on localhost:3030/ds. To explore the SQL endpoint an adminer docker image is used and server on port 8080. The credentials for the SQL connection are by default "postgres:postgres", the name of the SQL database is "imdb".

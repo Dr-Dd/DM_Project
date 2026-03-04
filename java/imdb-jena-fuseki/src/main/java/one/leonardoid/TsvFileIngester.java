@@ -24,7 +24,7 @@ public class TsvFileIngester {
         if (!filename.endsWith(".tsv.gz")) {
             throw new IllegalArgumentException("Expected .tsv.gz, got: " + filename);
         }
-        return Path.of("/fuseki/databases", filename.substring(5, filename.length() - 7) + ".nt.gz");
+        return Path.of(filename.substring(0, filename.length() - 7) + ".nt.gz");
     }
 
 
