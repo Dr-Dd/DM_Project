@@ -6,7 +6,8 @@
   <component name="ChangeListManager">
     <list default="true" id="06918fb6-e39b-414c-9bb9-f597bdf13fbe" name="Changes" comment="FInished ingesters.">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/one/leonardoid/TsvFileIngester.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/one/leonardoid/TsvFileIngester.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/one/leonardoid/NameBasicsImdbToJena.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/one/leonardoid/NameBasicsImdbToJena.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/one/leonardoid/TitleAkasImdbToJena.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/one/leonardoid/TitleAkasImdbToJena.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />

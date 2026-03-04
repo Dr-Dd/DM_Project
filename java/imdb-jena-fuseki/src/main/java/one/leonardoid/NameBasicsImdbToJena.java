@@ -40,7 +40,7 @@ public class NameBasicsImdbToJena extends ImdbToJena {
                     srdf.triple(Triple.create(r, SchemaDO.jobTitle.asNode(), NodeFactory.createLiteralByValue(profession)));
             if(!knownForTitles.equals("\\N"))
                 for(String title : knownForTitles.split(","))
-                    srdf.triple(Triple.create( NodeFactory.createURI(ImdbSchema.title.getURI() + "/" + title), SchemaDO.actor.asNode(), r ));
+                    srdf.triple(Triple.create(NodeFactory.createURI(ImdbSchema.title.getURI() + "/" + title), SchemaDO.actor.asNode(), r));
         } catch (Exception e) {
             throw new RuntimeException(e);
         }

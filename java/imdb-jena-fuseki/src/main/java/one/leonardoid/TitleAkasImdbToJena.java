@@ -19,7 +19,7 @@ public class TitleAkasImdbToJena extends ImdbToJena {
                 String titleId = rec.getField("titleId");
                 String title = rec.getField("title");
 
-                Node r = NodeFactory.createURI(ImdbSchema.name.getURI() + "/" + titleId);
+                Node r = NodeFactory.createURI(ImdbSchema.title.getURI() + "/" + titleId);
 
                 if(!title.equals("\\N"))
                     srdf.triple(Triple.create(r, SchemaDO.alternateName.asNode(), NodeFactory.createLiteralByValue(title)));
