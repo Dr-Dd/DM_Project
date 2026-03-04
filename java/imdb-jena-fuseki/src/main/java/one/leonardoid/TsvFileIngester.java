@@ -24,17 +24,23 @@ public class TsvFileIngester {
         if (!filename.endsWith(".tsv.gz")) {
             throw new IllegalArgumentException("Expected .tsv.gz, got: " + filename);
         }
-        return Path.of(filename.substring(0, filename.length() - 7) + ".nt.gz");
+        return Path.of("/fuseki/databases", filename.substring(5, filename.length() - 7) + ".nt.gz");
     }
 
 
     public void ingestAllNT() throws IOException {
         for (Map.Entry<Path, ImdbToJena> e : pathJenaMap.entrySet()) {
-            try(FileOutputStream fos = new FileOutputStream(convertTsvGzToNtGz(e.getKey()).toString());
+            String outFilename = convertTsvGzToNtGz(e.getKey()).toString();
+            if (new File(outFilename).exists()) {
+                System.out.println("Skipping " + e.getKey().toString() + " ("+ outFilename + " already exists).");
+                continue;
+            }
+            System.out.println("Processing " + e.getKey().toString() +" .");
+            System.out.println("Writing to " + outFilename + " .");
+            try(FileOutputStream fos = new FileOutputStream(outFilename);
                 GZIPOutputStream gzos = new GZIPOutputStream(fos, 1024 * 64);
                 BufferedOutputStream out = new BufferedOutputStream(gzos, 1024 * 64)) {
                 StreamRDF srdf = StreamRDFWriter.getWriterStream(out, Lang.NTRIPLES);
-                System.out.println("Processing ".concat(e.getKey().toString()).concat("."));
                 srdf.start();
                 try (CsvReader<NamedCsvRecord> cr = GzipFileReader.openGzipFile(e.getKey().toString())) {
                     cr.forEach(rec ->
@@ -42,7 +48,7 @@ public class TsvFileIngester {
                     );
                 } finally {
                     srdf.finish();
-                    System.out.println("Finished processing ".concat(e.getKey().toString()).concat("."));
+                    System.out.println("Finished processing " + e.getKey().toString() + " .");
                 }
             }
         }

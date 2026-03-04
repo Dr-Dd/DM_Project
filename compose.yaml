@@ -31,19 +31,19 @@ services:
 
 
   fuseki:
-    #command: [ "--tdb2", "--update", "--loc", "databases/DB2", "/ds" ]
-    image: fuseki
+    command: [ "--tdb2", "--update", "--loc", "databases/DB2", "/ds" ]
     build: 
       context: ./fuseki
       dockerfile: Dockerfile
       args:
         JENA_VERSION: 6.0.0
+    image: fuseki
     container_name: fuseki
     ports:
       - 3030:3030
     volumes:
-      - ./fuseki/logs:/fuseki/logs
-      - ./fuseki/databases:/fuseki/databases
+      - fusekilogs:/fuseki/logs
+      - fusekidatabases:/fuseki/databases
     depends_on:
       java:
         condition: service_completed_successfully
@@ -56,12 +56,9 @@ services:
 
 
   python:
-    #image: python:latest
     build: python
     container_name: python
     depends_on:
-      fuseki:
-        condition: service_healthy
       postgres:
         condition: service_healthy
     volumes:
@@ -72,9 +69,9 @@ services:
     container_name: java
     volumes:
       - ./data:/data
-      - fusekidata:/fusekidata
-
+      - fusekidatabases:/fuseki/databases
 
 volumes:
     pgdata:
-    fusekidata:
+    fusekidatabases:
+    fusekilogs:

@@ -14,4 +14,8 @@ FROM eclipse-temurin:25-jre-jammy
 
 COPY --from=builder /app/target/imdb-jena-fuseki-*.jar ./app.jar
 
-ENTRYPOINT ["java", "-jar", "/app.jar"]
+COPY entrypoint.sh /entrypoint.sh
+RUN chmod +x /entrypoint.sh
+
+ENTRYPOINT ["/entrypoint.sh"]
+CMD ["java", "-jar", "/app.jar"]
