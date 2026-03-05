@@ -8,6 +8,7 @@ class TitlePrincipalsCopyTemplate(CopyTemplate):
     jobName_id_dict = {}
     characterIdCounter = 0
     characterName_id_dict = {}
+    principalsIdCounter = 0
 
     schema = {
         "category": {
@@ -23,6 +24,7 @@ class TitlePrincipalsCopyTemplate(CopyTemplate):
             "characterName": None
         },
         "titlePrincipals": {
+            "principalsId": None,
             "tconst": None,
             "ordering": None,
             "nconst": None,
@@ -51,6 +53,7 @@ class TitlePrincipalsCopyTemplate(CopyTemplate):
         TitlePrincipalsCopyTemplate.characterName_id_dict[c] = TitlePrincipalsCopyTemplate.characterIdCounter
 
     def ingest_row(self, row):
+        TitlePrincipalsCopyTemplate.principalsIdCounter += 1
         if row["category"] not in TitlePrincipalsCopyTemplate.categoryName_id_dict:
             cat = row["category"]
             TitlePrincipalsCopyTemplate.insert_new_category(cat)
@@ -75,6 +78,7 @@ class TitlePrincipalsCopyTemplate(CopyTemplate):
                     c
                 ))
         self.get_table_ctx("titlePrincipals").write_row((
+            TitlePrincipalsCopyTemplate.principalsIdCounter,
             row["tconst"],
             row["ordering"],
             row["nconst"],

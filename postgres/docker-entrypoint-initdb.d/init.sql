@@ -122,6 +122,7 @@ CREATE UNLOGGED TABLE character (
 );
 -- just a big aggregation table
 CREATE UNLOGGED TABLE titlePrincipals (
+  principalsId serial PRIMARY KEY,
   tconst text REFERENCES titleBasics(tconst),
   ordering smallint,
   nconst text REFERENCES nameBasics(nconst),
