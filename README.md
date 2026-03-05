@@ -111,4 +111,4 @@ The RDF dataset is built using `tdb2.xloader`.
 
 ##  License
 
-This project uses IMDb’s Non-Commercial datasets. Please ensure compliance with [IMDb's Terms of Use](https://www.imdb.com/interfaces/).
+This project uses IMDb’s Non-Commercial datasets. Please ensure compliance with [IMDb's Terms of Use](https://datasets.imdbws.com/).
