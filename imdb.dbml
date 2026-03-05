@@ -1,0 +1,27 @@
+-- title.basics.tsv.gz OK
+Table titleType (
+  titleTypeId integer [primary key],
+  titleTypeName text
+);
+Table genre (
+  genreId integer [primary key],
+  genreName text [unique, not null]
+);
+Table titleBasics (
+  tconst text [pk],
+  primaryTitle text [not null],
+  originalTitle text [not null],
+  isAdult boolean [not null],
+  startYear date,
+  endYear date,
+  runtimeMinutes int,
+  titleTypeId integer REFERENCES titleType(titleTypeId)
+);
+Table titleBasics_genre {
+  tconst text REFERENCES titleBasics(tconst),
+  genreId integer REFERENCES genre(genreId),
+
+  indexes {
+    (tconst, genreId)[pk]
+  }
+}

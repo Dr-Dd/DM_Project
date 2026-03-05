@@ -44,7 +44,7 @@ The RDF dataset is built using `tdb2.xloader`.
 
 2. **Download datasets**
 
-   Go to [IMDb's Non-Commercial Datasets](http://yasgui.org/short/HC0nn7yI0Q) page and download each `*.tsv.gz` file, create a `data` directory in the project root and move the archives to it.
+   Go to [IMDb's Non-Commercial Datasets](https://datasets.imdbws.com/) page and download each `*.tsv.gz` file, create a `data` directory in the project root and move the archives to it.
 
 3. **Generate N-Triples**
 
