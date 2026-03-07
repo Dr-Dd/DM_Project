@@ -1,5 +1,6 @@
 services:
 
+
   postgres:
     image: postgres:latest
     container_name: postgres
@@ -17,7 +18,6 @@ services:
       timeout: 3s
       retries: 3
 
-
   adminer:
     image: adminer:latest
     container_name: adminer
@@ -28,7 +28,6 @@ services:
       ADMINER_DEFAULT_SERVER: postgres
     ports:
       - 8080:8080
-
 
   fuseki:
     command: [ "--tdb2", "--update", "--loc", "databases/DB2", "/ds" ]
@@ -53,7 +52,6 @@ services:
       retries: 3
       start_period: 2m
 
-
   python:
     build: python
     container_name: python
@@ -69,6 +67,7 @@ services:
     volumes:
       - ./data:/data
       - fusekidatabases:/fuseki/databases
+
 
 volumes:
     pgdata:

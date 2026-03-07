@@ -1,13 +1,30 @@
 \documentclass[a4paper,10pt]{article}
 
+\usepackage{textcomp}
+\usepackage{enumitem}
+\usepackage{amsmath}
 \usepackage[a4paper, total={7in, 10in}]{geometry}
 \usepackage{titlesec}
 \usepackage{fancyhdr}
-\usepackage[sfdefault]{atkinson} %% Option 'sfdefault' if the base
+% \usepackage[sfdefault]{atkinson} %% Option 'sfdefault' if the base
 %% font of the document is to be sans serif.
 \usepackage[T1]{fontenc}
 \usepackage{hyperref}
 \usepackage{enumitem}
+\usepackage{svg}
+\usepackage[export]{adjustbox}
+\usepackage{contour}
+\usepackage{ulem}
+
+\renewcommand{\ULdepth}{1.8pt}
+\contourlength{0.8pt}
+
+\newcommand{\myuline}[1]{%
+  \uline{\phantom{#1}}%
+  \llap{\contour{white}{#1}}%
+}
+
+\graphicspath{{images/}}
 
 \urlstyle{same}
 \hypersetup{
@@ -34,16 +51,347 @@
 
 \section{Introduction}
 
+In this document, we will qualitatively and quantitatively analyze the
+differences between mapping a dataset to the relational model and to a
+graph database model, specifically RDF. The dataset considered is
+IMDb's Non-Commercial dataset, composed of information regarding
+movies, actors, ratings, directors, writers and other attributes. As
+for technology chosen, we used Apache Jena Fuseki for the Triplestore
+and PostgreSQL for the Relational Database.
+
 \section{Methodology}
 \subsection{IMDb's Non-Commercial Datasets}
+
+The dataset chosen has numerous problematic columns presenting a
+classic ETL problem that gets resolved during data ingestion in
+different ways:
+
+\begin{itemize}{}
+  \item Many rows have null values, designated by the character
+  \texttt{\textbackslash N}, which needs to be handled cleanly.
+  \item Columns like \texttt{primaryProfession} and
+  \texttt{knownForTitles} have an array-like structure that does not
+  map cleanly to either of our data models.
+  \item Columns like \texttt{isAdult} and \texttt{isOriginalTitle}
+  present boolean values in incompatible formats (0/1 instead of
+  true/false).
+  \item Some data is inconsistent; for instance, the
+  \texttt{characters} column, where all strings are written in a
+  single‑element JSON array
+\end{itemize}
+
+Another problem is the volume of data, about 9 GiB of tsv files gzipped
+to 1.8 GiB. To effectively import them both smart buffering and
+efficient secondary memory usage need to be employed, together with
+maintaining an acceptable complexity during the ETL process, ideally
+$O(n)$.
+
 \subsection{Relational mapping}
+
+We will now focus on the reasoning behind the chosen tables and
+mapping to the respective columns.
+
+For the file \texttt{title.basics} we have chosen to create the
+following relations:
+
+\begin{itemize}[label={}, noitemsep, before=\ttfamily]
+  \item titleType(\myuline{titleTypeId}, titleTypeName)
+  \item titleBasics(\myuline{tconst}, primaryTitle, originalTitle, isAdult, startYear, endYear, runtimeMinutes, *titleTypeId)
+  \item genre(\myuline{genreId}, genreName)
+  \item titleBasics\_genre(*\myuline{tconst}, *\myuline{genreId})
+\end{itemize}
+
+The column \texttt{tconst} is a natural primary key for each
+title. Given the repetitive nature of \texttt{titleType}, the
+\texttt{tconst - titleType} one-to-many relationship sees the latter
+promoted to a new entity. The same happens for \texttt{tconst -
+  genres}, with the difference that, being a many-to-many relationship
+it will need a junction table other than a dedicated \texttt{genre}
+relation. The rest of the columns act as attributes of the
+\texttt{titleBasics} relation.
+
+For the file \texttt{name.basics} we have chosen this subsequent
+relations:
+
+\begin{itemize}[label={}, noitemsep, before=\ttfamily]
+  \item nameBasics(\myuline{nconst}, primaryName, birthYear, deathYear)
+  \item knownForTitles(*\myuline{nconst}, *\myuline{tconst})
+  \item profession(\myuline{professionId}, professionName)
+  \item profession\_nameBasics(*\myuline{professionId}, *\myuline{nconst})
+\end{itemize}
+
+A string \texttt{nconst} is akin to \texttt{tconst} but for names,
+making it a natural primary key. The columns
+\texttt{primaryProfession} and \texttt{knownForTitles} are
+many-to-many relationships between a \texttt{name} and multiple
+\texttt{profession}(s) and \texttt{title}(s), so we follow the same logic as
+before: we create a relation to avoid duplicates and insert junction
+tables.
+
+The data in \texttt{title.akas} has this relational schema:
+
+\begin{itemize}[label={}, noitemsep, before=\ttfamily]
+  \item titleAkas(\myuline{akasId}, *tconst, ordering, title, isOriginalTitle, *regionId, *languageId)
+  \item region(\myuline{regionId}, regionName)
+  \item language(\myuline{languageId}, languageName)
+  \item akaType(\myuline{akaTypeId}, akaTypeName)
+  \item akaType\_titleAkas(*\myuline{akaTypeId}, *\myuline{akasId})
+  \item attribute(\myuline{attributeId}, attributeText)
+  \item attribute\_titleAkas(*\myuline{attributeId}, *\myuline{akasId})
+\end{itemize}
+
+We denote \textit{akas} as a way of calling alternative titles for a
+movie; for simplicity we decided to introduce an \texttt{akasId} to
+distinguish them (we could have also used a composite key of
+\texttt{tconst} and \texttt{title}). This is a many-to-one
+relationship to \texttt{titleBasics}. We also have the one-to-many
+relationships with \texttt{region} and \texttt{language}. And finally,
+two many-to-many relationships with \texttt{attributes} and with a new
+entity called \texttt{akaType}.
+
+As for \texttt{title.principals} we implemented this schema:
+
+\begin{itemize}[label={}, noitemsep, before=\ttfamily]
+  \item titlePrincipals(\myuline{principalsId}, *tconst, ordering, *nconst, *categoryId, *jobId, *characterId)
+  \item character(\myuline{characterId}, characterName)
+  \item category(\myuline{categoryId}, categoryName)
+  \item job(\myuline{jobId}, jobName)
+\end{itemize}
+
+Title principals track what each person has done for a certain
+title. What a person (\texttt{name}) has done can change a lot between
+actor, director, camera operator and other roles. To track these roles
+we have two one-to-many relationships in \texttt{character} and
+\texttt{category}. If the job also can be correlated with a character
+(for example in the case of an actor) we use the one-to-many
+relationship \texttt{character}.
+
+The table \texttt{title.crew} is very similar to
+\texttt{title.principals} but focuses on the roles of writers and
+directors:
+
+\begin{itemize}[label={}, noitemsep, before=\ttfamily]
+  \item writer(*\myuline{nconst}, *\myuline{tconst})
+  \item director(*\myuline{nconst}, *\myuline{tconst})
+\end{itemize}
+
+Since these are effectively two many‑to‑many relationships between
+\texttt{titles} and \texttt{names} all we have to do is create two
+junction tables between them.
+
+The data in \texttt{title.episode} is instead about distinguishing
+which \texttt{titles} are singular movies and which are part of a
+series:
+
+\begin{itemize}[label={}, noitemsep, before=\ttfamily]
+  \item titleEpisode(\myuline{episodeId}, *tconst, *parentTconst, seasonNumber, episodeNumber)
+\end{itemize}
+
+As such we just need to create two one-to-many foreign keys on the
+relation: one for the \texttt{title} we are representing, and one for
+the \texttt{title} representing the whole series. We also track the
+season and episode number. Again we add an \texttt{episodeId} for
+simplicity.
+
+Finally we map the \texttt{title.ratings}:
+
+\begin{itemize}[label={}, noitemsep, before=\ttfamily]
+  \item ratings(*tconst, averageRating, numVotes)
+\end{itemize}
+
+This maps perfectly to a separate relation \texttt{ratings} with a
+foreign key on the considered \texttt{title} and attributes on the
+number of votes and average rating.
+
+To import the data to PostgreSQL we have chosen to use Python with the
+\texttt{psycopg} library. This allows direct piping of buffered rows
+to the RDBMS via COPY protocol, allowing fast transactional operations
+run while temporarily disabling integrity constraints until the
+transaction is finished. As another expedient to speed up the
+ingestion of data we have opted to create \texttt{unlogged} tables,
+which are not crash resistant but fine for the purpose of our
+project. We also used \texttt{rapidgzip} to overcome the single
+threaded, small buffering of data done by the builtin python
+\texttt{Gzip} library. The PostgreSQL library Psycopg imposes a buffer
+of 64 KiB for its operations, which did not act as a bottleneck for
+the transactions. We implemented the strategy pattern on the various
+ways rows should be ingested by each different file and table, opening
+one connection for each separate table, one file at a time, committing
+the whole converted file at once. This approach, while fast enough,
+could be problematic for databases that refuse multiple concurrent
+connections from one host. A better way would be to generate the
+non-transactional data to be loaded sequentially in the database.
+
+\begin{figure}
+  \begin{centering}
+    \includesvg[width=1\textwidth,inkscapelatex=false]{imdb.sql.svg}
+    \caption[IMDb Relational Schema]{IMDb's Relational Schema.}
+    \label{fig:IMDb Relational Schema}
+  \end{centering}
+\end{figure}
+
 
 \subsection{Triplestore Mapping}
 
+We will explain the rationale behind the approach used to build the
+Triplestore mapping. Since RDF is based on a way to allow
+interconnection of elements primarily in the web, and seeing how IMDb
+already implements it on its website, we decided to mimic its
+structure where possible. In particular, IMDb makes heavy use of
+\texttt{schema.org} models. On our part, in addition to mimicking
+IMDb's choices, where possible we decided to expand it with
+appropriate predicates and objects present in the most adaptable
+schema. Specifically, we used the \texttt{RDF:type} of
+\texttt{schema.org/Movie} to describe the \texttt{titles},
+\texttt{schema.org/Person} for the \texttt{names},
+\texttt{schema.org/AggregateRating} for the \texttt{ratings}. While
+IMDb's implementation of the schema lacked a node identifier for each
+triple, we included the subject by simply specifying the correct IMDb
+page for each node. For example, a \texttt{title} with a
+\texttt{tconst} will be mapped to the self-imposed IMDb schema (based
+on their website mapping) of
+\texttt{www.imdb.com/title/<tconst>}. Same thing for
+\texttt{schema.org/AggregateRating}, which will map to
+\texttt{www.imdb.com/title/<tconst>/reviews}. For every single other
+column seen in the dataset, these will map to predicates present in
+the aforementioned schemas used by IMDb itself. Some notable
+exceptions are language and region, which are not tracked in
+conformance with W3C's system of country codes, and as such are not
+specified when considering alternative titles (even though
+\texttt{schema.org} provides schemas for specifying detailed
+alternative names, just not with IMDb's country codes). IMDb doesn't
+bother tracking these country codes in their RDF schema, since they
+use it for the semantic web and not archival purposes. Apart from that
+lost information, everything was accounted for by \texttt{schema.org}
+types. One thing of note is that any null value we came across simply
+was not added to the graph.
+
+To import the data we did not have any access to fast transactional
+interfaces to Apache Jena Fuseki, so to ingest it we had to extend the
+previous approach implemented in the relational part of this etl
+process in two parts:
+
+\begin{enumerate}
+  \item Read all the files row by row, and convert them to a file
+  format for fast parsing. In our case we chose N-Triples. One
+  possibly better alternative is RDF Binary, also called RDF Thrift.
+  \item Import them in a non-transactional way to Apache Jena Fuseki.
+\end{enumerate}
+
+The first part required us to build in Java the same strategy pattern
+implemented by our SQL solution, switching from transactionally
+copying to tables to non-transactionally dumping constructed
+N-Triples. To do so we leveraged Apache Jena's \texttt{StreamRDF}
+interface for fast writing together with Java's builtin
+\texttt{BufferedReader} and \texttt{GZIP*Stream}, with
+\texttt{FastCSV} for quick parsing and a buffer of 64 KiB where
+configurable (this didn't speed up the process much compared to the
+default 8 KiB buffer, the \texttt{ext4} filesystem in use has a block
+size of 4 KiB). For the row generation we used the \texttt{Node} and
+\texttt{NodeFactory} API for low-level construction of triples. All
+operations are single threaded since the performance is acceptable
+even without concurrent processing. It should be trivial to speed it
+up even more by processing multiple files at the same time.
+
+The second part, given the number of 225 million tuples, required
+leveraging the large scale data loading tool \texttt{tdb2.xloader}.
+Created by Apache, it works orders of magnitude better than the
+standard tool \texttt{tdb2.tdbloader}. Their difference is the way
+they build their SPO, POS, OSP indexes for subjects, objects and
+predicates; \texttt{tdb2.xloader} does them sequentially instead of in
+parallel (SPO\textrightarrow POS\textrightarrow OSP), trying to
+maximize buffer usage, cache hits and using N-1 thread for parallel
+processing of a single triple. This is a better approach for large
+amounts of data.
+
+\begin{figure}
+  \begin{centering}
+    \includesvg[width=\textwidth,inkscapelatex=false]{graph.svg}
+    \caption[Excerpt of RDF Graph]{Excerpt of RDF Graph for tt0109382.}
+    \label{fig:Excerpt of RDF Graph.}
+  \end{centering}
+\end{figure}
+
 \section{Analysis}
+
+The implementation of the two technologies was significantly
+different. Excluding the technological differences in loading the
+data, adapting the original data to the schemas was much more
+difficult in a relational setting than in a graph one. This is for one
+simple reason: relational schemas are very granular and detailed,
+always allowing us to find a way to map existing information to it. As
+such, for every problematic column we found there was an approach that
+allowed us to insert it efficiently in our schema.
+
+Graph databases based on RDF instead are very standardized. While
+technically schema-less, international conventions on how to store and
+share data are present and encouraged in their use. These are very
+comprehensive and rarely lack any desired fields, speeding up the
+engineering and analysis phase immensely. Still, they require
+integrating a private, personal schema for unimplemented requirements,
+such as the custom country codes and language codes used by IMDb. This
+is faster and simpler than building everything from scratch.
+
+Another important difference is the lack of native support to
+implement integrity checks at the schema level. Unlike SQL, RDF does
+not provide a native way to do this, and W3C has since fixed this flaw
+by introducing SHACL, a validation protocol for N-Triples. This is
+completely decoupled from the triples themselves and as such is
+effectively separate from the data storage. This is expected, since
+RDF and graph databases were first and foremost designed for rapidly
+changing, extensible models and not archival needs. In other words, we
+are able to set constraints, but these are not directly correlated to
+a schema if not via external documentation. A possible, if still
+decoupled, way of partially solving this can be found in the RDFS W3C
+standard (constraints and schemas would still be two separate,
+independent entities, but fixed in stone).
+
+Instead, SQL allows for very precise integrity checks at the schema
+level, declarable directly in the table definition. This enhances the
+integrity of stored data since we can leverage both an external
+validator and an internal checker.
+
+Regarding the speed of queries, the simple model with which a graph
+database is built allows for the construction of very thorough
+triple-based indexes. These cover any association we may ever need
+regarding subject-predicate-object queries, which are the vast
+majority of query executed.
+
+Conversely, SQL does not come with any indexes outside ones built for
+every primary key in every table we have. In theory, we could map the
+most common queries required by us and build what we need. But this is
+costly and must be considered carefully, making graph databases
+overall more versatile.
+
+For example, comparing the same query for getting all the movies made
+by one director, their titles, the director name and their year of
+publishing, Apache Jena Fuseki spends 0.215 seconds, PostgreSQL 23.975
+seconds. As such, graph databases allow for faster development and
+expansion of functionalities, since implementing a new query for a
+service may not need any external intervention from the engineer
+other than writing the SPARQL code.
+
+This ties well with another relatively minor problem: secondary
+storage use. Our 225 million triple triplestore and its indexes
+occupies a total of 19 GiB, our SQL database with its primary key
+indexes occupies 22 GiB. This is another aspect which is better in the
+world of graph databases (more utility in less space).
 
 \section{Conclusion}
 
+Overall, we can say that graph databases, in this case specifically
+RDF triplestores, provide a strong alternative to existing solutions
+in the market. Unlike classical NoSQL solutions like MongoDB, graph
+databases cover a much larger set of needs. While SQL is inherently
+capable of addressing these needs, it requires significantly more
+engineering. The only aspect that is objectively better in SQL is
+integrity constraints, which are directly implemented in the schema
+and effectively pair well with other client and server side validators
+connected to the database. A more interesting research topic could be
+the comparison of ORM tools for these two paradigms. Superficially
+speaking, there do not seem to be particular hurdles that could limit
+the usage of a graph database in an ORM environment, but more analysis
+should be done.
 
 \end{document}
 
@@ -51,4 +399,5 @@
 %%% Local Variables:
 %%% mode: LaTeX
 %%% TeX-master: t
+%%% TeX-command-extra-options: "--shell-escape"
 %%% End:
