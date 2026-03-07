@@ -81,13 +81,13 @@
 
 \section{Introduction}
 
-In this document, we will qualitatively and quantitatively analyze the
-differences between mapping a dataset to the relational model and to a
-graph database model, specifically RDF. The dataset considered is
-IMDb's Non-Commercial dataset, composed of information regarding
-movies, actors, ratings, directors, writers and other attributes. As
-for technology chosen, we used Apache Jena Fuseki for the Triplestore
-and PostgreSQL for the Relational Database.
+In this document, we will qualitatively analyze the differences
+between mapping a dataset to the relational model and to a graph
+database model, specifically RDF. The dataset considered is IMDb's
+Non-Commercial dataset, composed of information regarding movies,
+actors, ratings, directors, writers and other attributes. As for
+technology chosen, we used Apache Jena Fuseki for the Triplestore and
+PostgreSQL for the Relational Database.
 
 \section{Methodology}
 \subsection{IMDb's Non-Commercial Datasets}
@@ -373,10 +373,7 @@ effectively separate from the data storage. This is expected, since
 RDF and graph databases were first and foremost designed for rapidly
 changing, extensible models and not archival needs. In other words, we
 are able to set constraints, but these are not directly correlated to
-a schema if not via external documentation. A possible, if still
-decoupled, way of partially solving this can be found in the RDFS W3C
-standard (constraints and schemas would still be two separate,
-independent entities, but fixed in stone).
+a schema if not via external documentation.
 
 Instead, SQL allows for very precise integrity checks at the schema
 level, declarable directly in the table definition. This enhances the
@@ -390,10 +387,11 @@ regarding subject-predicate-object queries, which are the vast
 majority of query executed.
 
 Conversely, SQL does not come with any indexes outside ones built for
-every primary key in every table we have. In theory, we could map the
-most common queries required by us and build what we need. But the
-construction of multiple indexes can be costly and must be considered
-carefully, making graph databases overall more versatile.
+every primary key in every table we have. Secondary indexes need to be
+built separately. In theory, we could map the most common queries
+required by us and build what we need. But the construction of
+multiple indexes can be costly and must be considered carefully,
+making graph databases overall more versatile.
 
 For example, comparing the same query for getting all the movies made
 by one director, selected by director name, their title and their year
@@ -445,17 +443,15 @@ ORDER BY tb.startYear ASC
 
 Overall, we can say that graph databases, in this case specifically
 RDF triplestores, provide a strong alternative to existing solutions
-in the market. Unlike classical NoSQL solutions like MongoDB, graph
-databases cover a much larger set of needs. While SQL is inherently
-capable of addressing these needs, it requires significantly more
-engineering. The only aspect that is objectively better in SQL is
+in the market. While SQL is inherently capable of addressing these
+needs, it requires significantly more engineering. The aspects that
+are better in SQL are exactly this granular quality and built-in
 integrity constraints, which are directly implemented in the schema
 and effectively pair well with other client and server side validators
-connected to the database. A more interesting research topic could be
-the comparison of ORM tools for these two paradigms. Superficially
-speaking, there do not seem to be particular hurdles that could limit
-the usage of a graph database in an ORM environment, but more analysis
-should be done.
+connected to the database. It is hard to think of a project in which
+SQL really does not fit as a model. The worst that could happen is
+that SQL is not automatically as performant natively, it needs lots of
+engineering to be a good fit.
 
 \end{document}
 

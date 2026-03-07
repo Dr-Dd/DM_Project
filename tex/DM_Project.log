@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.27 (TeX Live 2025) (preloaded format=pdflatex 2025.5.14)  7 MAR 2026 15:05
+This is pdfTeX, Version 3.141592653-2.6-1.40.27 (TeX Live 2025) (preloaded format=pdflatex 2025.5.14)  7 MAR 2026 15:20
 entering extended mode
  \write18 enabled.
  file:line:error style messages enabled.
@@ -751,14 +751,12 @@ Package pdftex.def Info: ./svg-inkscape/graph_svg-raw.pdf  used on input line 3
 
 [4 <./svg-inkscape/graph_svg-raw.pdf>]
 Package hyperref Info: bookmark level for unknown lstlisting defaults to 0 on i
-nput line 410.
+nput line 408.
 LaTeX Font Info:    Font shape `T1/cmtt/bx/n' in size <9> not available
-(Font)              Font shape `T1/cmtt/m/n' tried instead on input line 411.
+(Font)              Font shape `T1/cmtt/m/n' tried instead on input line 409.
 
 
-[5]
-
-[6] (./DM_Project.aux)
+[5] (./DM_Project.aux)
  ***********
 LaTeX2e <2024-11-01> patch level 2
 L3 programming layer <2025-04-29>
@@ -767,8 +765,8 @@ Package rerunfilecheck Info: File `DM_Project.out' has not changed.
 (rerunfilecheck)             Checksum: F46734D519B2DF0D462CE312A8EE7AD5;895.
  ) 
 Here is how much of TeX's memory you used:
- 16556 strings out of 469590
- 271198 string characters out of 5470346
+ 16555 strings out of 469590
+ 271192 string characters out of 5470346
  824459 words of memory out of 5000000
  43075 multiletter control sequences out of 15000+600000
  637056 words of font info for 65 fonts, out of 8000000 for 9000
@@ -784,10 +782,10 @@ al/texlive/2025/texmf-dist/fonts/type1/public/cm-super/sfrm1728.pfb></usr/local
 /texlive/2025/texmf-dist/fonts/type1/public/cm-super/sfti1000.pfb></usr/local/t
 exlive/2025/texmf-dist/fonts/type1/public/cm-super/sftt0900.pfb></usr/local/tex
 live/2025/texmf-dist/fonts/type1/public/cm-super/sftt1000.pfb>
-Output written on DM_Project.pdf (6 pages, 338353 bytes).
+Output written on DM_Project.pdf (5 pages, 337890 bytes).
 PDF statistics:
- 301 PDF objects out of 1000 (max. 8388607)
- 207 compressed objects within 3 object streams
- 42 named destinations out of 1000 (max. 500000)
+ 297 PDF objects out of 1000 (max. 8388607)
+ 204 compressed objects within 3 object streams
+ 41 named destinations out of 1000 (max. 500000)
  79 words of extra memory for PDF output out of 10000 (max. 10000000)
 
