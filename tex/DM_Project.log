@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.27 (TeX Live 2025) (preloaded format=pdflatex 2025.5.14)  7 MAR 2026 14:41
+This is pdfTeX, Version 3.141592653-2.6-1.40.27 (TeX Live 2025) (preloaded format=pdflatex 2025.5.14)  7 MAR 2026 15:05
 entering extended mode
  \write18 enabled.
  file:line:error style messages enabled.
@@ -546,33 +546,65 @@ File: pdftex.cnt 2004/11/18 v2.14 Print contoured text (HH, MH)
 Package: ulem 2019/11/18
 \ULdepth=\dimen260
 )
-Package hyperref Info: Option `colorlinks' set `true' on input line 36.
+(/usr/local/texlive/2025/texmf-dist/tex/latex/listings/listings.sty
+\lst@mode=\count322
+\lst@gtempboxa=\box64
+\lst@token=\toks38
+\lst@length=\count323
+\lst@currlwidth=\dimen261
+\lst@column=\count324
+\lst@pos=\count325
+\lst@lostspace=\dimen262
+\lst@width=\dimen263
+\lst@newlines=\count326
+\lst@lineno=\count327
+\lst@maxwidth=\dimen264
+
+(/usr/local/texlive/2025/texmf-dist/tex/latex/listings/lstpatch.sty
+File: lstpatch.sty 2024/09/23 1.10c (Carsten Heinz)
+)
+(/usr/local/texlive/2025/texmf-dist/tex/latex/listings/lstmisc.sty
+File: lstmisc.sty 2024/09/23 1.10c (Carsten Heinz)
+\c@lstnumber=\count328
+\lst@skipnumbers=\count329
+\lst@framebox=\box65
+)
+(/usr/local/texlive/2025/texmf-dist/tex/latex/listings/listings.cfg
+File: listings.cfg 2024/09/23 1.10c listings configuration
+))
+Package: listings 2024/09/23 1.10c (Carsten Heinz)
+
+(/usr/local/texlive/2025/texmf-dist/tex/latex/minipage-marginpar/minipage-margi
+npar.sty
+Package: minipage-marginpar 2008/04/07 v0.3 Randnotizen auch in Minipages (PE)
+)
+Package hyperref Info: Option `colorlinks' set `true' on input line 66.
 
 (/usr/local/texlive/2025/texmf-dist/tex/latex/l3backend/l3backend-pdftex.def
 File: l3backend-pdftex.def 2025-04-14 L3 backend support: PDF output (pdfTeX)
-\l__color_backend_stack_int=\count322
+\l__color_backend_stack_int=\count330
 )
 (./DM_Project.aux)
 \openout1 = `DM_Project.aux'.
 
-LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 48.
-LaTeX Font Info:    ... okay on input line 48.
-LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 48.
-LaTeX Font Info:    ... okay on input line 48.
-LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 48.
-LaTeX Font Info:    ... okay on input line 48.
-LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 48.
-LaTeX Font Info:    ... okay on input line 48.
-LaTeX Font Info:    Checking defaults for TS1/cmr/m/n on input line 48.
-LaTeX Font Info:    ... okay on input line 48.
-LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 48.
-LaTeX Font Info:    ... okay on input line 48.
-LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 48.
-LaTeX Font Info:    ... okay on input line 48.
-LaTeX Font Info:    Checking defaults for PD1/pdf/m/n on input line 48.
-LaTeX Font Info:    ... okay on input line 48.
-LaTeX Font Info:    Checking defaults for PU/pdf/m/n on input line 48.
-LaTeX Font Info:    ... okay on input line 48.
+LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 78.
+LaTeX Font Info:    ... okay on input line 78.
+LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 78.
+LaTeX Font Info:    ... okay on input line 78.
+LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 78.
+LaTeX Font Info:    ... okay on input line 78.
+LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 78.
+LaTeX Font Info:    ... okay on input line 78.
+LaTeX Font Info:    Checking defaults for TS1/cmr/m/n on input line 78.
+LaTeX Font Info:    ... okay on input line 78.
+LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 78.
+LaTeX Font Info:    ... okay on input line 78.
+LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 78.
+LaTeX Font Info:    ... okay on input line 78.
+LaTeX Font Info:    Checking defaults for PD1/pdf/m/n on input line 78.
+LaTeX Font Info:    ... okay on input line 78.
+LaTeX Font Info:    Checking defaults for PU/pdf/m/n on input line 78.
+LaTeX Font Info:    ... okay on input line 78.
 
 *geometry* driver: auto-detecting
 *geometry* detected driver: pdftex
@@ -608,7 +640,7 @@ LaTeX Font Info:    ... okay on input line 48.
 * \@reversemarginfalse
 * (1in=72.27pt=25.4mm, 1cm=28.453pt)
 
-Package hyperref Info: Link coloring ON on input line 48.
+Package hyperref Info: Link coloring ON on input line 78.
 (./DM_Project.out) (./DM_Project.out)
 \@outlinefile=\write4
 \openout4 = `DM_Project.out'.
@@ -616,17 +648,17 @@ Package hyperref Info: Link coloring ON on input line 48.
 
 (/usr/local/texlive/2025/texmf-dist/tex/context/base/mkii/supp-pdf.mkii
 [Loading MPS to PDF converter (version 2006.09.02).]
-\scratchcounter=\count323
-\scratchdimen=\dimen261
-\scratchbox=\box64
-\nofMPsegments=\count324
-\nofMParguments=\count325
-\everyMPshowfont=\toks38
-\MPscratchCnt=\count326
-\MPscratchDim=\dimen262
-\MPnumerator=\count327
-\makeMPintoPDFobject=\count328
-\everyMPtoPDFconversion=\toks39
+\scratchcounter=\count331
+\scratchdimen=\dimen265
+\scratchbox=\box66
+\nofMPsegments=\count332
+\nofMParguments=\count333
+\everyMPshowfont=\toks39
+\MPscratchCnt=\count334
+\MPscratchDim=\dimen266
+\MPnumerator=\count335
+\makeMPintoPDFobject=\count336
+\everyMPtoPDFconversion=\toks40
 ) (/usr/local/texlive/2025/texmf-dist/tex/latex/epstopdf-pkg/epstopdf-base.sty
 Package: epstopdf-base 2020-01-24 v2.11 Base part for package epstopdf
 Package epstopdf-base Info: Redefining graphics rule for `.eps' on input line 4
@@ -636,25 +668,27 @@ Package epstopdf-base Info: Redefining graphics rule for `.eps' on input line 4
 File: epstopdf-sys.cfg 2010/07/13 v1.3 Configuration of (r)epstopdf for TeX Liv
 e
 ))
-contour: Using 16 copies for `titleTypeId' on input line 98.
-contour: Using 16 copies for `tconst' on input line 99.
+\c@lstlisting=\count337
 
-Overfull \hbox (7.24083pt too wide) in paragraph at lines 99--100
+contour: Using 16 copies for `titleTypeId' on input line 128.
+contour: Using 16 copies for `tconst' on input line 129.
+
+Overfull \hbox (7.24083pt too wide) in paragraph at lines 129--130
 []\T1/cmtt/m/n/10 titleBasics(|   [][], primaryTitle, originalTitle, isAdult, s
 tartYear, endYear, runtimeMinutes,
  []
 
-contour: Using 16 copies for `genreId' on input line 100.
-contour: Using 16 copies for `tconst' on input line 101.
-contour: Using 16 copies for `genreId' on input line 101.
-contour: Using 16 copies for `nconst' on input line 117.
-contour: Using 16 copies for `nconst' on input line 118.
-contour: Using 16 copies for `tconst' on input line 118.
-contour: Using 16 copies for `professionId' on input line 119.
-contour: Using 16 copies for `professionId' on input line 120.
-contour: Using 16 copies for `nconst' on input line 120.
+contour: Using 16 copies for `genreId' on input line 130.
+contour: Using 16 copies for `tconst' on input line 131.
+contour: Using 16 copies for `genreId' on input line 131.
+contour: Using 16 copies for `nconst' on input line 147.
+contour: Using 16 copies for `nconst' on input line 148.
+contour: Using 16 copies for `tconst' on input line 148.
+contour: Using 16 copies for `professionId' on input line 149.
+contour: Using 16 copies for `professionId' on input line 150.
+contour: Using 16 copies for `nconst' on input line 150.
 
-Overfull \hbox (6.86699pt too wide) in paragraph at lines 123--130
+Overfull \hbox (6.86699pt too wide) in paragraph at lines 153--160
 []\T1/cmr/m/n/10 A string \T1/cmtt/m/n/10 nconst \T1/cmr/m/n/10 is akin to \T1/
 cmtt/m/n/10 tconst \T1/cmr/m/n/10 but for names, mak-ing it a nat-u-ral pri-mar
 y key. The columns \T1/cmtt/m/n/10 primaryProfession
@@ -667,42 +701,42 @@ y key. The columns \T1/cmtt/m/n/10 primaryProfession
 {/usr/local/texlive/2025/texmf-var/fonts/map/pdftex/updmap/pdftex.map}{/usr/loc
 al/texlive/2025/texmf-dist/fonts/enc/dvips/cm-super/cm-super-t1.enc}{/usr/local
 /texlive/2025/texmf-dist/fonts/enc/dvips/cm-super/cm-super-ts1.enc}]
-contour: Using 16 copies for `akasId' on input line 134.
-contour: Using 16 copies for `regionId' on input line 135.
-contour: Using 16 copies for `languageId' on input line 136.
-contour: Using 16 copies for `akaTypeId' on input line 137.
-contour: Using 16 copies for `akaTypeId' on input line 138.
-contour: Using 16 copies for `akasId' on input line 138.
-contour: Using 16 copies for `attributeId' on input line 139.
-contour: Using 16 copies for `attributeId' on input line 140.
-contour: Using 16 copies for `akasId' on input line 140.
-contour: Using 16 copies for `principalsId' on input line 155.
+contour: Using 16 copies for `akasId' on input line 164.
+contour: Using 16 copies for `regionId' on input line 165.
+contour: Using 16 copies for `languageId' on input line 166.
+contour: Using 16 copies for `akaTypeId' on input line 167.
+contour: Using 16 copies for `akaTypeId' on input line 168.
+contour: Using 16 copies for `akasId' on input line 168.
+contour: Using 16 copies for `attributeId' on input line 169.
+contour: Using 16 copies for `attributeId' on input line 170.
+contour: Using 16 copies for `akasId' on input line 170.
+contour: Using 16 copies for `principalsId' on input line 184.
 
-Overfull \hbox (1.99211pt too wide) in paragraph at lines 155--156
+Overfull \hbox (1.99211pt too wide) in paragraph at lines 184--185
 []\T1/cmtt/m/n/10 titlePrincipals(|   [][], *tconst, ordering, *nconst, *catego
 ryId, *jobId, *characterId) 
  []
 
-contour: Using 16 copies for `characterId' on input line 156.
-contour: Using 16 copies for `categoryId' on input line 157.
-contour: Using 16 copies for `jobId' on input line 158.
-contour: Using 16 copies for `nconst' on input line 174.
-contour: Using 16 copies for `tconst' on input line 174.
-contour: Using 16 copies for `nconst' on input line 175.
-contour: Using 16 copies for `tconst' on input line 175.
-contour: Using 16 copies for `episodeId' on input line 187.
+contour: Using 16 copies for `characterId' on input line 185.
+contour: Using 16 copies for `categoryId' on input line 186.
+contour: Using 16 copies for `jobId' on input line 187.
+contour: Using 16 copies for `nconst' on input line 203.
+contour: Using 16 copies for `tconst' on input line 203.
+contour: Using 16 copies for `nconst' on input line 204.
+contour: Using 16 copies for `tconst' on input line 204.
+contour: Using 16 copies for `episodeId' on input line 216.
 <./svg-inkscape/imdb.sql_svg-raw.pdf, id=49, 962.16924pt x 901.1581pt>
 File: ./svg-inkscape/imdb.sql_svg-raw.pdf Graphic file (type pdf)
 <use ./svg-inkscape/imdb.sql_svg-raw.pdf>
 Package pdftex.def Info: ./svg-inkscape/imdb.sql_svg-raw.pdf  used on input lin
-e 227.
+e 257.
 (pdftex.def)             Requested size: 962.16689pt x 901.1559pt.
 
 
 [2]
 
 [3 <./svg-inkscape/imdb.sql_svg-raw.pdf>]
-Overfull \hbox (2.07745pt too wide) in paragraph at lines 296--306
+Overfull \hbox (2.07745pt too wide) in paragraph at lines 328--338
 \T1/cmr/m/n/10 Their dif-fer-ence is the way they build their SPO, POS, OSP in-
 dexes for sub-jects, ob-jects and pred-i-cates; \T1/cmtt/m/n/10 tdb2.xloader
  []
@@ -711,13 +745,20 @@ dexes for sub-jects, ob-jects and pred-i-cates; \T1/cmtt/m/n/10 tdb2.xloader
 File: ./svg-inkscape/graph_svg-raw.pdf Graphic file (type pdf)
 <use ./svg-inkscape/graph_svg-raw.pdf>
 Package pdftex.def Info: ./svg-inkscape/graph_svg-raw.pdf  used on input line 3
-09.
+41.
 (pdftex.def)             Requested size: 1265.08914pt x 428.15628pt.
 
 
 [4 <./svg-inkscape/graph_svg-raw.pdf>]
+Package hyperref Info: bookmark level for unknown lstlisting defaults to 0 on i
+nput line 410.
+LaTeX Font Info:    Font shape `T1/cmtt/bx/n' in size <9> not available
+(Font)              Font shape `T1/cmtt/m/n' tried instead on input line 411.
 
-[5] (./DM_Project.aux)
+
+[5]
+
+[6] (./DM_Project.aux)
  ***********
 LaTeX2e <2024-11-01> patch level 2
 L3 programming layer <2025-04-29>
@@ -726,13 +767,13 @@ Package rerunfilecheck Info: File `DM_Project.out' has not changed.
 (rerunfilecheck)             Checksum: F46734D519B2DF0D462CE312A8EE7AD5;895.
  ) 
 Here is how much of TeX's memory you used:
- 14811 strings out of 469590
- 247222 string characters out of 5470346
- 709148 words of memory out of 5000000
- 41372 multiletter control sequences out of 15000+600000
- 636743 words of font info for 64 fonts, out of 8000000 for 9000
+ 16556 strings out of 469590
+ 271198 string characters out of 5470346
+ 824459 words of memory out of 5000000
+ 43075 multiletter control sequences out of 15000+600000
+ 637056 words of font info for 65 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
- 94i,11n,93p,339b,456s stack positions out of 10000i,1000n,20000p,200000b,200000s
+ 94i,11n,93p,339b,1479s stack positions out of 10000i,1000n,20000p,200000b,200000s
 </usr/local/texlive/2025/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi10.pfb
 ></usr/local/texlive/2025/texmf-dist/fonts/type1/public/amsfonts/cm/cmr10.pfb><
 /usr/local/texlive/2025/texmf-dist/fonts/type1/public/cm-super/sfbx1200.pfb></u
@@ -741,11 +782,12 @@ sr/local/texlive/2025/texmf-dist/fonts/type1/public/cm-super/sfbx1440.pfb></usr
 ocal/texlive/2025/texmf-dist/fonts/type1/public/cm-super/sfrm1200.pfb></usr/loc
 al/texlive/2025/texmf-dist/fonts/type1/public/cm-super/sfrm1728.pfb></usr/local
 /texlive/2025/texmf-dist/fonts/type1/public/cm-super/sfti1000.pfb></usr/local/t
-exlive/2025/texmf-dist/fonts/type1/public/cm-super/sftt1000.pfb>
-Output written on DM_Project.pdf (5 pages, 298943 bytes).
+exlive/2025/texmf-dist/fonts/type1/public/cm-super/sftt0900.pfb></usr/local/tex
+live/2025/texmf-dist/fonts/type1/public/cm-super/sftt1000.pfb>
+Output written on DM_Project.pdf (6 pages, 338353 bytes).
 PDF statistics:
- 261 PDF objects out of 1000 (max. 8388607)
- 171 compressed objects within 2 object streams
- 17 named destinations out of 1000 (max. 500000)
+ 301 PDF objects out of 1000 (max. 8388607)
+ 207 compressed objects within 3 object streams
+ 42 named destinations out of 1000 (max. 500000)
  79 words of extra memory for PDF output out of 10000 (max. 10000000)
 

@@ -92,7 +92,7 @@ The RDF dataset is built using `tdb2.xloader`.
     ```
     * [Adminer](http://localhost:8080/?pgsql=postgres&username=postgres&db=imdb&ns=public&sql=SELECT%20%27https%3A%2F%2Fimdb.com%2Ftitle%2F%27%20%7C%7C%20tb.tconst%2C%20nb.primaryname%2C%20tb.primarytitle%2C%20tb.startyear%20%20%0AFROM%20namebasics%20nb%0AJOIN%20director%20d%20ON%20nb.nconst%20%3D%20d.nconst%0AJOIN%20titlebasics%20tb%20ON%20d.tconst%20%3D%20tb.tconst%0AWHERE%20nb.primaryname%20%3D%20%27Nanni%20Moretti%27%0AORDER%20BY%20tb.startYear%20ASC)
     ```SQL
-	# An index on nb.primaryname is suggested
+	-- An index on nb.primaryname is suggested
 	SELECT 'https://imdb.com/title/' || tb.tconst, nb.primaryname, tb.primarytitle, tb.startyear
 	FROM namebasics nb
 	JOIN director d ON nb.nconst = d.nconst

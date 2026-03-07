@@ -15,9 +15,39 @@
 \usepackage[export]{adjustbox}
 \usepackage{contour}
 \usepackage{ulem}
+\usepackage{listings}
+\usepackage{xcolor}
+\usepackage{minipage-marginpar}
 
 \renewcommand{\ULdepth}{1.8pt}
 \contourlength{0.8pt}
+
+\lstdefinestyle{sparqlstyle}{
+    basicstyle=\ttfamily\small,
+    keywordstyle=\color{blue}\bfseries,
+    commentstyle=\color{gray}\itshape,
+    stringstyle=\color{orange},
+    breaklines=true,
+    frame=single,
+    rulecolor=\color{black!30},
+    backgroundcolor=\color{gray!8},
+    captionpos=b,
+    morekeywords={SELECT, WHERE, VALUES, ORDER, BY, PREFIX},
+}
+
+\lstdefinestyle{sqlstyle}{
+    basicstyle=\ttfamily\small,
+    keywordstyle=\color{blue}\bfseries,
+    commentstyle=\color{gray}\itshape,
+    stringstyle=\color{orange},
+    breaklines=true,
+    frame=single,
+    rulecolor=\color{black!30},
+    backgroundcolor=\color{gray!8},
+    captionpos=b,
+    morecomment=[l]{\#},
+    morekeywords={SELECT, FROM, JOIN, ON, WHERE, ORDER, BY, ASC},
+}
 
 \newcommand{\myuline}[1]{%
   \uline{\phantom{#1}}%
@@ -142,12 +172,11 @@ The data in \texttt{title.akas} has this relational schema:
 
 We denote \textit{akas} as a way of calling alternative titles for a
 movie; for simplicity we decided to introduce an \texttt{akasId} to
-distinguish them (we could have also used a composite key of
-\texttt{tconst} and \texttt{title}). This is a many-to-one
-relationship to \texttt{titleBasics}. We also have the one-to-many
-relationships with \texttt{region} and \texttt{language}. And finally,
-two many-to-many relationships with \texttt{attributes} and with a new
-entity called \texttt{akaType}.
+distinguish them. This is a many-to-one relationship to
+\texttt{titleBasics}. We also have the one-to-many relationships with
+\texttt{region} and \texttt{language}. And finally, two many-to-many
+relationships with \texttt{attributes} and with a new entity called
+\texttt{akaType}.
 
 As for \texttt{title.principals} we implemented this schema:
 
@@ -212,20 +241,23 @@ ingestion of data we have opted to create \texttt{unlogged} tables,
 which are not crash resistant but fine for the purpose of our
 project. We also used \texttt{rapidgzip} to overcome the single
 threaded, small buffering of data done by the builtin python
-\texttt{Gzip} library. The PostgreSQL library Psycopg imposes a buffer
-of 64 KiB for its operations, which did not act as a bottleneck for
-the transactions. We implemented the strategy pattern on the various
-ways rows should be ingested by each different file and table, opening
-one connection for each separate table, one file at a time, committing
-the whole converted file at once. This approach, while fast enough,
-could be problematic for databases that refuse multiple concurrent
-connections from one host. A better way would be to generate the
-non-transactional data to be loaded sequentially in the database.
+\texttt{Gzip} library. The PostgreSQL library Psycopg uses a default
+buffer size of 64 KiB for its operations, which did not act as a
+bottleneck for the transactions. We implemented the strategy pattern
+on the various ways rows should be ingested by each different file and
+table, opening one connection for each separate table, one file at a
+time, committing the whole converted file at once. This approach,
+while fast enough, could be problematic for databases that refuse
+multiple concurrent connections from one host. A better way would be
+to generate the non-transactional data to be loaded sequentially in
+the database.
 
 \begin{figure}
   \begin{centering}
     \includesvg[width=1\textwidth,inkscapelatex=false]{imdb.sql.svg}
-    \caption[IMDb Relational Schema]{IMDb's Relational Schema.}
+    \caption[IMDb Relational Schema]{IMDb's Relational Schema (note:
+      some column names have been renamed for implementation
+      reasons).}
     \label{fig:IMDb Relational Schema}
   \end{centering}
 \end{figure}
@@ -301,7 +333,7 @@ they build their SPO, POS, OSP indexes for subjects, objects and
 predicates; \texttt{tdb2.xloader} does them sequentially instead of in
 parallel (SPO\textrightarrow POS\textrightarrow OSP), trying to
 maximize buffer usage, cache hits and using N-1 thread for parallel
-processing of a single triple. This is a better approach for large
+processing of a index at a time. This is a better approach for large
 amounts of data.
 
 \begin{figure}
@@ -335,7 +367,7 @@ is faster and simpler than building everything from scratch.
 Another important difference is the lack of native support to
 implement integrity checks at the schema level. Unlike SQL, RDF does
 not provide a native way to do this, and W3C has since fixed this flaw
-by introducing SHACL, a validation protocol for N-Triples. This is
+by introducing SHACL, a validation protocol for RDF graphs. This is
 completely decoupled from the triples themselves and as such is
 effectively separate from the data storage. This is expected, since
 RDF and graph databases were first and foremost designed for rapidly
@@ -359,24 +391,55 @@ majority of query executed.
 
 Conversely, SQL does not come with any indexes outside ones built for
 every primary key in every table we have. In theory, we could map the
-most common queries required by us and build what we need. But this is
-costly and must be considered carefully, making graph databases
-overall more versatile.
+most common queries required by us and build what we need. But the
+construction of multiple indexes can be costly and must be considered
+carefully, making graph databases overall more versatile.
 
 For example, comparing the same query for getting all the movies made
 by one director, selected by director name, their title and their year
-of publishing, both Apache Jena Fuseki and PostgreSQL spend around 0.4
-seconds to get a result, as long as the relational database has an
-index on \texttt{nameBasics.primaryName}. As such, graph databases
-allow for faster development and expansion of functionalities, since
+of publishing, both Apache Jena Fuseki and PostgreSQL spend similar
+time to get a result, as long as the relational database has an index
+on \texttt{nameBasics.primaryName}. As such, graph databases allow for
+faster development and expansion of functionalities, since
 implementing a new query for a service may not need any external
 intervention from the engineer other than writing the SPARQL code.
 
-This ties well with another relatively minor problem: secondary
-storage use. Our 225 million triple triplestore and its indexes
-occupies a total of 19 GiB, our SQL database with its primary key
-indexes occupies 22 GiB. This is another aspect which is better in the
-world of graph databases (more utility in less space).
+\begin{figure}[h]
+\begin{minipage}[t]{0.48\textwidth}
+    \lstset{style=sparqlstyle}
+    \begin{lstlisting}[caption={SPARQL Query}]
+SELECT ?creativeWork ?directorName
+       ?workName ?date
+WHERE {
+  VALUES ?directorName { "Nanni Moretti" }
+  ?director schema:name ?directorName .
+  ?creativeWork schema:director ?director ;
+    schema:name ?workName ;
+    schema:datePublished ?date .
+} ORDER BY ?date
+    \end{lstlisting}
+\end{minipage}
+\hfill
+\begin{minipage}[t]{0.48\textwidth}
+    \lstset{style=sqlstyle}
+    \begin{lstlisting}[caption={SQL Query}]
+-- Index on nb.primaryname suggested
+SELECT 'https://www.imdb.com/title/'
+       || tb.tconst,
+       nb.primaryname,
+       tb.primarytitle,
+       tb.startyear
+FROM namebasics nb
+JOIN director d
+  ON nb.nconst = d.nconst
+JOIN titlebasics tb
+  ON d.tconst = tb.tconst
+WHERE nb.primaryname = 'Nanni Moretti'
+ORDER BY tb.startYear ASC
+    \end{lstlisting}
+\end{minipage}
+\end{figure}
+
 
 \section{Conclusion}
 

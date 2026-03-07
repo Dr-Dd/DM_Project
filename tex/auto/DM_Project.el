@@ -8,7 +8,7 @@
    (TeX-add-to-alist 'LaTeX-provided-class-options
                      '(("article" "a4paper" "10pt")))
    (TeX-add-to-alist 'LaTeX-provided-package-options
-                     '(("AtkinsonHyperlegible" "sfdefault") ("graphicx" "") ("atkinson" "sfdefault") ("textcomp" "") ("enumitem" "") ("amsmath" "") ("geometry" "a4paper" "total={7in, 10in}") ("titlesec" "") ("fancyhdr" "") ("fontenc" "T1") ("hyperref" "") ("svg" "") ("adjustbox" "export") ("contour" "") ("ulem" "")))
+                     '(("AtkinsonHyperlegible" "sfdefault") ("graphicx" "") ("atkinson" "sfdefault") ("textcomp" "") ("enumitem" "") ("amsmath" "") ("geometry" "a4paper" "total={7in, 10in}") ("titlesec" "") ("fancyhdr" "") ("fontenc" "T1") ("hyperref" "") ("svg" "") ("adjustbox" "export") ("contour" "") ("ulem" "") ("listings" "") ("xcolor" "") ("minipage-marginpar" "")))
    (add-to-list 'LaTeX-verbatim-macros-with-braces-local "href")
    (add-to-list 'LaTeX-verbatim-macros-with-braces-local "hyperimage")
    (add-to-list 'LaTeX-verbatim-macros-with-braces-local "hyperbaseurl")
@@ -31,7 +31,10 @@
     "svg"
     "adjustbox"
     "contour"
-    "ulem")
+    "ulem"
+    "listings"
+    "xcolor"
+    "minipage-marginpar")
    (TeX-add-symbols
     '("myuline" 1))
    (LaTeX-add-labels
