@@ -364,12 +364,13 @@ costly and must be considered carefully, making graph databases
 overall more versatile.
 
 For example, comparing the same query for getting all the movies made
-by one director, their titles, the director name and their year of
-publishing, Apache Jena Fuseki spends 0.215 seconds, PostgreSQL 23.975
-seconds. As such, graph databases allow for faster development and
-expansion of functionalities, since implementing a new query for a
-service may not need any external intervention from the engineer
-other than writing the SPARQL code.
+by one director, selected by director name, their title and their year
+of publishing, both Apache Jena Fuseki and PostgreSQL spend around 0.4
+seconds to get a result, as long as the relational database has an
+index on \texttt{nameBasics.primaryName}. As such, graph databases
+allow for faster development and expansion of functionalities, since
+implementing a new query for a service may not need any external
+intervention from the engineer other than writing the SPARQL code.
 
 This ties well with another relatively minor problem: secondary
 storage use. Our 225 million triple triplestore and its indexes

@@ -77,35 +77,28 @@ The RDF dataset is built using `tdb2.xloader`.
 8. **Explore your data**
 
     Here are some queries to get you started:
-    * [YASGUI](http://yasgui.org/short/ISP_oz9k0w)
+    * [YASGUI](https://yasgui.org/#query=PREFIX+schema%3A+%3Chttps%3A%2F%2Fschema.org%2F%3E%0A%0ASELECT+%3FcreativeWork+%3FdirectorName+%3FworkName+%3Fdate%0AWHERE+%7B%0A++VALUES+%3FdirectorName+%7B+%22Nanni+Moretti%22+%7D%0A++%3Fdirector+schema%3Aname+%3FdirectorName+.%0A++%3FcreativeWork+schema%3Adirector+%3Fdirector+%3B%0A+++++++++++++++schema%3Aname+%3FworkName+%3B%0A+++++++++++++++schema%3AdatePublished+%3Fdate+.%0A%7D+ORDER+BY+%3Fdate&contentTypeConstruct=text%2Fturtle&contentTypeSelect=application%2Fsparql-results%2Bjson&endpoint=http%3A%2F%2Flocalhost%3A3030%2Fds&requestMethod=POST&tabTitle=Query&headers=%7B%7D&outputFormat=table)
     ```SPARQL
-    # SPARQL
-    PREFIX schema: <https://schema.org/>
+	PREFIX schema: <https://schema.org/>
 
-    SELECT ?creativeWork ?director ?directorName ?workName ?date
-    WHERE {
-      ?director a schema:Person ;
-                  schema:name ?directorName .
-      ?creativeWork schema:director ?director ;
-                    schema:name ?workName ;
-                    schema:datePublished ?date .
-      FILTER(?directorName = "Nanni Moretti")
-    } ORDER BY ?date
+	SELECT ?creativeWork ?directorName ?workName ?date
+	WHERE {
+		VALUES ?directorName { "Nanni Moretti" }
+		?director schema:name ?directorName .
+		?creativeWork schema:director ?director ;
+			schema:name ?workName ;
+			schema:datePublished ?date .
+	} ORDER BY ?date
     ```
-    * [Adminer](http://localhost:8080/?pgsql=postgres&username=postgres&db=imdb&ns=public&sql=SELECT%20%0A%20%20tb.tconst%20AS%20%22creativeWork%22%2C%20%0A%20%20d.nconst%20AS%20%22director%22%2C%0A%20%20nb.primaryName%20AS%20%22directorName%22%2C%20%0A%20%20tb.primaryTitle%20AS%20%22workName%22%2C%20%0A%20%20tb.startYear%20AS%20%22date%22%0AFROM%20nameBasics%20nb%0AJOIN%20director%20d%20ON%20nb.nconst%20%3D%20d.nconst%0AJOIN%20titleBasics%20tb%20ON%20d.tconst%20%3D%20tb.tconst%0AJOIN%20titleAkas%20ta%20ON%20tb.tconst%20%3D%20ta.titleId%0AWHERE%20nb.primaryName%20%3D%20%27Nanni%20Moretti%27%20AND%20ta.isOriginalTitle%20%3D%20True%0AORDER%20BY%20tb.startYear%20ASC)
+    * [Adminer](http://localhost:8080/?pgsql=postgres&username=postgres&db=imdb&ns=public&sql=SELECT%20%27https%3A%2F%2Fimdb.com%2Ftitle%2F%27%20%7C%7C%20tb.tconst%2C%20nb.primaryname%2C%20tb.primarytitle%2C%20tb.startyear%20%20%0AFROM%20namebasics%20nb%0AJOIN%20director%20d%20ON%20nb.nconst%20%3D%20d.nconst%0AJOIN%20titlebasics%20tb%20ON%20d.tconst%20%3D%20tb.tconst%0AWHERE%20nb.primaryname%20%3D%20%27Nanni%20Moretti%27%0AORDER%20BY%20tb.startYear%20ASC)
     ```SQL
-    # SQL
-    SELECT tb.tconst AS "creativeWork",
-           d.nconst AS "director",
-           nb.primaryName AS "directorName",
-           tb.primaryTitle AS "title",
-           tb.startYear AS "date"
-    FROM nameBasics nb
-    JOIN director d ON nb.nconst = d.nconst
-    JOIN titleBasics tb ON d.tconst = tb.tconst
-    JOIN titleAkas ta ON tb.tconst = ta.titleId
-    WHERE nb.primaryName = 'Nanni Moretti' AND ta.isOriginalTitle = True
-    ORDER BY tb.startYear ASC
+	# An index on nb.primaryname is suggested
+	SELECT 'https://imdb.com/title/' || tb.tconst, nb.primaryname, tb.primarytitle, tb.startyear
+	FROM namebasics nb
+	JOIN director d ON nb.nconst = d.nconst
+	JOIN titlebasics tb ON d.tconst = tb.tconst
+	WHERE nb.primaryname = 'Nanni Moretti'
+	ORDER BY tb.startYear ASC
     ```
 ---
 
